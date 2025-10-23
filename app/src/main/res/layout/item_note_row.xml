@@ -1,0 +1,77 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_marginBottom="6dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilNote"
+        style="@style/LoginTextInputLayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxCornerRadiusBottomEnd="5dp"
+        app:boxCornerRadiusBottomStart="5dp"
+        app:boxCornerRadiusTopEnd="5dp"
+        app:boxCornerRadiusTopStart="5dp"
+        app:hintAnimationEnabled="true"
+        app:startIconDrawable="@drawable/note"
+        app:hintTextColor="@color/text_color"
+        app:endIconTint="@color/color4"
+        app:startIconTint="@color/color4"
+        android:textColorHint="@color/text_color"
+        app:boxStrokeColor="@color/text_color"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tietNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:hint="Catatan pesanan"
+            android:imeOptions="actionDone"
+            android:inputType="textCapSentences|textMultiLine"
+            android:gravity="top|start"
+            android:scrollbars="vertical"
+            android:overScrollMode="always"
+            android:maxLines="4"
+            android:minLines="2"
+            android:textSize="18sp"
+            android:textColor="@color/font_side" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilQtyNote"
+        style="@style/LoginTextInputLayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxCornerRadiusBottomEnd="5dp"
+        app:boxCornerRadiusBottomStart="5dp"
+        app:boxCornerRadiusTopEnd="5dp"
+        app:boxCornerRadiusTopStart="5dp"
+        app:hintAnimationEnabled="true"
+        app:hintTextColor="@color/text_color"
+        app:endIconTint="@color/color4"
+        app:startIconTint="@color/color4"
+        android:textColorHint="@color/text_color"
+        app:boxStrokeColor="@color/text_color"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tietQtyNote"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:hint="Kuantitas Item"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textSize="18sp"
+            android:textColor="@color/font_side"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

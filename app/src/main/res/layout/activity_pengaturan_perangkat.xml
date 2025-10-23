@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".pengaturan.PengaturanPerangkatActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="5dp">
+        <LinearLayout
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/ivKembaliDariPengaturanPerangkat"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_left"
+                android:contentDescription="TODO"
+                android:layout_marginEnd="5dp"
+                app:tint="@color/color7" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pengaturan Perangkat"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/font_side"/>
+        </LinearLayout>
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        >
+                        <ImageView
+                            android:id="@+id/ivBluetooth"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/bluetooth"
+                            android:layout_marginEnd="10dp"
+                            android:contentDescription="TODO"
+                            android:layout_gravity="center_vertical"
+                            app:tint="@color/color7"
+                            />
+                        <Switch
+                            android:id="@+id/switchOnOffBluetooth"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="@color/font_side"
+                            android:text="Bluetooth"
+                            android:textStyle="bold"
+                            android:gravity="left"
+                            tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml"
+                            android:checked="false"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"/>
+                    </TableRow>
+                    <TableRow
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/cariPerangkat"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true">
+                        <ImageView
+                            android:id="@+id/ivCariBluetooth"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/listbtt"
+                            android:layout_marginEnd="10dp"
+                            android:contentDescription="TODO"
+                            android:layout_gravity="center_vertical"
+                            app:tint="@color/color7"
+                            />
+                        <TextView
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="@color/font_side"
+                            android:text="Cari Perangkat"
+                            android:textStyle="bold"
+
+                            tools:ignore="RelativeOverlap" />
+
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp">
+
+                        <ImageView
+                            android:layout_marginEnd="10dp"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/bluetooth_pairing"
+                            android:layout_gravity="center_vertical"
+                            app:tint="@color/color7"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="Perangkat Terhubung"
+                            android:textStyle="bold"
+                            android:textColor="@color/font_side"
+                            android:textSize="16sp"
+
+                            android:layout_gravity="center_vertical"
+                            />
+
+                        <TextView
+                            android:id="@+id/pengaturan_bluetooth_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.9"
+                            android:ellipsize="end"
+                            android:text="-"
+                            android:textColor="@color/temaapp"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:maxLines="1"
+
+                            android:layout_gravity="center_vertical"
+                            />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ujiPrinter"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:id="@+id/ivTestPrinter"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/print_svgrepo_com"
+                            android:layout_marginEnd="10dp"
+                            android:contentDescription="TODO"
+                            app:tint="@color/color7"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="@color/font_side"
+                            android:text="Tes Printer"
+                            android:textStyle="bold"
+
+                            android:layout_gravity="center_vertical"
+                            />
+                    </TableRow>
+                </TableLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/font_side"/>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+                    <TableRow
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+                        <ImageView
+                            android:id="@+id/ivCashDrawer"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/cash_register_svgrepo_com"
+                            android:layout_marginEnd="10dp"
+                            app:tint="@color/color7"/>
+                        <Switch
+
+                            android:layout_weight="1"
+                            android:layout_toEndOf="@+id/ivCashDrawer"
+                            android:id="@+id/switchCashDrawer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="@color/font_side"
+                            android:text="Cash Drawer"
+                            android:textStyle="bold"
+                            app:tint="@color/color7"
+                            android:layout_gravity="center_vertical"
+                            tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml"
+                            android:checked="false"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/barcode_scanner_svgrepo_com"
+                            android:layout_marginEnd="10dp"
+                            android:layout_gravity="center_vertical"
+                            app:tint="@color/color7"
+                            />
+
+                        <Switch
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:id="@+id/switchBarcode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            app:tint="@color/color7"
+                            android:gravity="left"
+                            android:text="Barcode"
+                            android:textColor="@color/font_side"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+
+                    </TableRow>
+                </TableLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/font_side"/>
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:layout_marginBottom="20dp">
+
+                    <TableRow
+                        android:layout_marginTop="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <ImageView
+                            android:id="@+id/ivStore"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/store_bxs_alt"
+                            android:layout_marginEnd="10dp"
+                            android:layout_gravity="center_vertical"
+                            app:tint="@color/color7"
+                            />
+                        <Switch
+                            android:layout_weight="1"
+                            android:id="@+id/switchTipeStore"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="@color/font_side"
+                            android:text="Store"
+                            android:textStyle="bold"
+
+                            android:gravity="left"
+                            tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml"
+                            android:checked="false"/>
+                    </TableRow>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_gravity="center_vertical"
+                        style="@style/LoginTextInputLayoutStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:boxCornerRadiusBottomEnd="5dp"
+                        app:boxCornerRadiusBottomStart="5dp"
+                        app:boxCornerRadiusTopEnd="5dp"
+                        app:boxCornerRadiusTopStart="5dp"
+                        app:hintAnimationEnabled="true"
+                        app:startIconDrawable="@drawable/table_svgrepo_com"
+                        app:hintTextColor="@color/font_side"
+                        app:endIconTint="@color/font_side"
+                        app:startIconTint="@color/color7"
+                        android:textColorHint="@color/font_side"
+                        app:boxStrokeColor="@color/font_side" android:layout_marginTop="15dp"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tietJumlahMeja"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:hint="Jumlah Meja"
+                            android:imeOptions="actionNext"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textSize="16sp"
+
+                            android:textColor="@color/temaapp"
+                            android:textStyle="bold"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_gravity="center_vertical"
+                        style="@style/LoginTextInputLayoutStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:boxCornerRadiusBottomEnd="5dp"
+                        app:boxCornerRadiusBottomStart="5dp"
+                        app:boxCornerRadiusTopEnd="5dp"
+                        app:boxCornerRadiusTopStart="5dp"
+                        app:hintAnimationEnabled="true"
+                        app:startIconDrawable="@drawable/ic_tax"
+                        app:hintTextColor="@color/font_side"
+                        app:endIconTint="@color/font_side"
+                        app:startIconTint="@color/color7"
+                        android:textColorHint="@color/font_side"
+                        app:boxStrokeColor="@color/font_side" android:layout_marginTop="15dp"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tietTax"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:hint="Pajak Restoran"
+                            android:imeOptions="actionNext"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textSize="16sp"
+
+                            android:textColor="@color/temaapp"
+                            android:textStyle="bold"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </TableLayout>
+                <ProgressBar
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/progressBarSearchBluetooth"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:visibility="gone"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvListBluetooth"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:listitem="@layout/view_list_bluetooth" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+</LinearLayout>

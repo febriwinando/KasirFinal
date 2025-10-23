@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/temaapp</item>
+        <!--        <item name="boxStrokeWidth">dp</item>-->
+    </style>
+    <style name="ImageStyleBottom20">
+        <item name="cornerSize">20dp</item>
+    </style>
+
+    <style name="TextLabelLunas"  >
+        <item name="android:textColorHint">@color/font_side</item>
+        <item name="colorControlActivated">@color/color2</item>
+    </style>
+
+    <style name="TextLabelHutang"  >
+        <item name="android:textColorHint">@color/font_side</item>
+        <item name="colorControlActivated">@color/color8</item>
+    </style>
+
+    <style name="DialogStyle" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowMinWidthMinor">100%</item>
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowBackground">#00437B94</item>
+    </style>
+    <style name="CustomMaterialCheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <!-- Warna centang dan border -->
+        <item name="buttonTint">@color/temaapp</item>
+        <!-- Nonaktifkan warna default Material -->
+        <item name="useMaterialThemeColors">false</item>
+        <!-- Warna teks -->
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">20sp</item>
+        <!-- Spasi dan padding agar rapi -->
+        <!-- Ripple effect modern -->
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+
+</resources>

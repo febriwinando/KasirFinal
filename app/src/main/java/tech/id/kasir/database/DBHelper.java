@@ -262,6 +262,27 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
+    public String getInvoiceByMeja(String meja) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String nomorInvoice = null;
+
+        Cursor cursor = db.rawQuery(
+                "SELECT nomor_invoice FROM " + TABLE_ORDER + " WHERE status = ? AND meja = ? LIMIT 1",
+                new String[]{"diproses", meja}
+        );
+
+        if (cursor.moveToFirst()) {
+            nomorInvoice = cursor.getString(cursor.getColumnIndexOrThrow("nomor_invoice"));
+        }
+
+        cursor.close();
+        db.close();
+
+        return nomorInvoice;
+    }
+
+
+
 
 
     public boolean insertOrder(int restoranId, int penggunaId, String nomorInvoice, String meja,

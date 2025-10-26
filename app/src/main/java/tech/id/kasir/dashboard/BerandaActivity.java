@@ -1,7 +1,9 @@
 package tech.id.kasir.dashboard;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -12,6 +14,8 @@ import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import java.io.IOException;
 
 import tech.id.kasir.R;
 import tech.id.kasir.pengaturan.PengaturanPerangkatActivity;
@@ -24,6 +28,25 @@ public class BerandaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_beranda);
+        SharedPreferences prefs = getSharedPreferences("kasir_prefs", MODE_PRIVATE);
+        String lastAddress = prefs.getString("last_device_address", null);
+
+//        if (lastAddress != null) {
+//            new Thread(() -> {
+//                try {
+//                    BluetoothConnectionManager btManager = BluetoothConnectionManager.getInstance();
+//                    btManager.connect(lastAddress);
+//                    runOnUiThread(() ->
+//                                    Log.d("Blueetooth Koneksi", "Berhasil terhubung"));
+////                            pengaturan_bluetooth_status.setText("Terhubung otomatis"));
+//                } catch (IOException e) {
+//                    runOnUiThread(() ->
+////                            pengaturan_bluetooth_status.setText("Gagal reconnect"));
+//                            Log.d("Blueetooth Koneksi", "Gagal terhubung"));
+//
+//                }
+//            }).start();
+//        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

@@ -1,5 +1,6 @@
 package tech.id.kasir.transaksi;
 
+import android.bluetooth.BluetoothSocket;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
@@ -7,32 +8,39 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.window.OnBackInvokedDispatcher;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
 import androidx.core.os.BuildCompat;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import tech.id.kasir.R;
 import tech.id.kasir.database.DBHelper;
-import tech.id.kasir.response_api.Menu;
 import tech.id.kasir.response_api.OrderItemRequest;
+import tech.id.kasir.utility.btt.ModelProdukFinalTransaksi;
+import tech.id.kasir.utility.btt.SintaksPOST;
+import tech.id.kasir.utility.btt.UtilBluetooth;
+import static tech.id.kasir.pengaturan.PengaturanPerangkatActivity.bluetoothSocket;
+import static tech.id.kasir.pengaturan.PengaturanPerangkatActivity.outputStreamer;
 
 public class TransaksiActivity extends AppCompatActivity {
 
@@ -42,7 +50,12 @@ public class TransaksiActivity extends AppCompatActivity {
     ArrayList<OrderItemRequest> listOrders = new ArrayList<>();
     RecyclerView rvListOrders;
     ImageView kembalidariTransaksi;
-    TextView tanggalTransaksi, tvHasilTotalView, tvTotalOrder, tvUangTerima, tvUangKembali;
+    TextView tanggalTransaksi;
+    TextView tvHasilTotalView;
+    TextView tvTotalOrder;
+    TextView tvUangTerima;
+    TextView tvUangKembali;
+    TextView tvInvoice;
     TextInputEditText tietUangTerima;
     DBHelper dbHelper = new DBHelper(this);
 
@@ -51,6 +64,13 @@ public class TransaksiActivity extends AppCompatActivity {
     Integer id_order;
     Double uangDiterima, uang_kembali;
     NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(new Locale("in", "ID"));
+    RadioButton radioStatusSelected;
+    int selected;
+    ImageButton ivPrintVactur;
+    RadioGroup rgStatusTransaksi;
+    UtilBluetooth utilBluetooth = new UtilBluetooth();
+//    public static OutputStream outputStreamer;
+    SintaksPOST sintaksPOST = new SintaksPOST();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +80,7 @@ public class TransaksiActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transaksi);
 
         Bundle intentPesananMeja = getIntent().getExtras();
-        noMeja = intentPesananMeja.getString("nomeja");
+        noMeja = Objects.requireNonNull(intentPesananMeja).getString("nomeja");
         id_order = intentPesananMeja.getInt("id_order");
 
         kembalidariTransaksi = findViewById(R.id.kembalidariTransaksi);
@@ -71,12 +91,25 @@ public class TransaksiActivity extends AppCompatActivity {
         tietUangTerima = findViewById(R.id.tietUangTerima);
         tvUangTerima = findViewById(R.id.tvUangTerima);
         tvUangKembali = findViewById(R.id.tvUangKembali);
+        tvInvoice = findViewById(R.id.tvInvoice);
+        ivPrintVactur = findViewById(R.id.ivPrintVactur);
+        rgStatusTransaksi = findViewById(R.id.rgStatusTransaksi);
+
+        selected = rgStatusTransaksi.getCheckedRadioButtonId();
+        radioStatusSelected = findViewById(selected);
 
         rvListOrders.setHasFixedSize(true);
 
 
         double total = dbHelper.getTotalHargaByOrderId(id_order);
         String totalFormatted = formatRupiah.format(total);
+
+
+        String invoice = dbHelper.getInvoiceByMeja(noMeja);
+
+        if (invoice != null) {
+            tvInvoice.setText(invoice);
+        }
 
         tvHasilTotalView.setText(totalFormatted);
         tvTotalOrder.setText(totalFormatted);
@@ -110,6 +143,61 @@ public class TransaksiActivity extends AppCompatActivity {
             }
         });
 
+        ivPrintVactur.setOnClickListener(v -> {
+            String status = "0";
+            selected = rgStatusTransaksi.getCheckedRadioButtonId();
+            radioStatusSelected = findViewById(selected);
+            if (selected != -1){
+                if (radioStatusSelected.getText().toString().equals("Lunas")){
+                    status = "1";
+
+                    if (tietUangTerima.getText().toString().trim().isEmpty()){
+                        tietUangTerima.setError("Harap Isi Kolom Tersebut");
+                        return;
+                    }
+
+
+                    if (uang_kembali < 0.00){
+                        tietUangTerima.setError("Harap Isi Dengan Benar");
+                        return;
+                    }
+                }else{
+                    status = "2";
+                    uangDiterima = (double) 0;
+                    uang_kembali = (double) 0;
+                }
+
+
+            }else{
+                uangDiterima = (double) 0;
+                uang_kembali =  (double) 0;
+            }
+
+
+
+            if (utilBluetooth.isConnected(bluetoothSocket)){
+                try {
+                    outputStreamer = bluetoothSocket.getOutputStream();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show();
+
+                sintaksPOST.droping(TransaksiActivity.this, listOrders, bluetoothSocket,
+                        outputStreamer, "pengunjung", invoice, today, "costumer", formatRupiah.format(total), formatRupiah.format(total),
+                        formatRupiah.format(uangDiterima), String.valueOf(uang_kembali), formatRupiah.format(total), status);
+
+                sintaksPOST.openCashDrawer(outputStreamer);
+            }else{
+
+                Toast.makeText(this, "Gagal", Toast.LENGTH_SHORT).show();
+
+
+//                viewListBluetooth();
+
+            }
+        });
+
         kembalidariTransaksi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,19 +208,18 @@ public class TransaksiActivity extends AppCompatActivity {
         if (BuildCompat.isAtLeastT()) {
             getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
                     OnBackInvokedDispatcher.PRIORITY_DEFAULT,
-                    () -> {
-                        finish();
-                    }
+                    this::finish
             );
         }
 
     }
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
+
+
         listOrders.clear();
         listOrders.addAll(getOrdersfromDatabase());
         showRecyclerList();

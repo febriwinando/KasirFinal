@@ -19,12 +19,13 @@ import java.util.Calendar;
 import java.util.Date;
 
 import tech.id.kasir.R;
+import tech.id.kasir.response_api.OrderItemRequest;
 
 public class SintaksPOST {
-    ArrayList<ModelProdukFinalTransaksi> modelProdukFinalTransaksis = new ArrayList<>();
+    ArrayList<OrderItemRequest> modelProdukFinalTransaksis = new ArrayList<>();
 
     public void droping(Activity context,
-                        ArrayList<ModelProdukFinalTransaksi> modelProdukFinalTransaksis,
+                        ArrayList<OrderItemRequest> modelProdukFinalTransaksis,
                         BluetoothSocket mBTSocket, OutputStream outputStream,
                         String pengunjung, String invoice, String tanggal, String costumer,
                         String tax, String order, String uangditerima, String uangkembali, String totalTansaksi, String status) {
@@ -51,9 +52,9 @@ public class SintaksPOST {
             printText(leftRightAlign("Pelanggan" , costumer), outputStream);
 
 //            Float total = 0.00F;
-            for (ModelProdukFinalTransaksi modelDroping: modelProdukFinalTransaksis){
-                float jumlahDroping = Float.parseFloat(modelDroping.getHarga_produk()) * Float.parseFloat(String.valueOf(modelDroping.getQty()));
-                printText(leftRightAlign(modelDroping.getQty()+"   "+modelDroping.getNama_produk().toUpperCase(), formatRupiah.format(jumlahDroping)), outputStream);
+            for (OrderItemRequest modelDroping: modelProdukFinalTransaksis){
+                float jumlahDroping = Float.parseFloat(modelDroping.getHarga_satuan()) * Float.parseFloat(String.valueOf(modelDroping.getJumlah()));
+                printText(leftRightAlign(modelDroping.getJumlah()+"   "+modelDroping.getNama_menu().toUpperCase(), formatRupiah.format(jumlahDroping)), outputStream);
 //                total += jumlahDroping;
 //                printNewLine(outputStream);
             }

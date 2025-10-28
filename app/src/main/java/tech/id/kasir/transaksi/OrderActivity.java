@@ -225,25 +225,54 @@ public class OrderActivity extends AppCompatActivity {
 
 
     OrderAdapter orderAdapter;
-    private void showRecyclerList(){
-
+    private void showRecyclerList() {
         rvListMenu.setLayoutManager(new GridLayoutManager(this, 2));
         orderAdapter = new OrderAdapter(listMenu, OrderActivity.this, noMeja);
         rvListMenu.setAdapter(orderAdapter);
 
-        orderAdapter.setOnItemClickCallback(new OrderAdapter.OnItemClickCallback() {
-            @Override
-            public void onItemClicked(Menu data) {
+        // Inisialisasi dialogView
+        dialogView = new DialogView(this);
 
-                showDynamicNoteDialog(OrderActivity.this, "Burger", data.getId());
+        // 🔥 Daftarkan listener callback hapus item
+        dialogView.setOnItemDeletedListener(itemId -> {
+            // Update tampilan adapter
+            orderAdapter.updateItemJumlahToZero(itemId);
+        });
+
+        orderAdapter.setOnItemClickCallback(new OrderAdapter.OnItemClickCallback() {
+
+            @Override
+            public void onItemClicked(int id, int meja, String name_item) {
+                showDynamicNoteDialog(OrderActivity.this, name_item, id);
             }
 
             @Override
-            public void onItemLongClicked(Menu data) {
-                dialogView.viewHapusItemOrder();
+            public void onItemLongClicked(int id) {
+                dialogView.viewHapusItemOrder(id);
             }
         });
     }
+
+//    private void showRecyclerList(){
+//
+//        rvListMenu.setLayoutManager(new GridLayoutManager(this, 2));
+//        orderAdapter = new OrderAdapter(listMenu, OrderActivity.this, noMeja);
+//        rvListMenu.setAdapter(orderAdapter);
+//
+//        orderAdapter.setOnItemClickCallback(new OrderAdapter.OnItemClickCallback() {
+//
+//            @Override
+//            public void onItemClicked(int id, int meja, String name_item) {
+//                showDynamicNoteDialog(OrderActivity.this, name_item, id);
+//            }
+//
+//            @Override
+//            public void onItemLongClicked(int id) {
+//
+//                dialogView.viewHapusItemOrder(id);
+//            }
+//        });
+//    }
 
     public void showDynamicNoteDialog(Context context, String menuName, int orderItemId) {
         Dialog dialogNotes = new Dialog(context, R.style.DialogStyle);

@@ -29,6 +29,7 @@ import tech.id.kasir.MainActivity;
 import tech.id.kasir.R;
 import tech.id.kasir.network.NetworkUtil;
 import tech.id.kasir.pengaturan.PengaturanPerangkatActivity;
+import tech.id.kasir.utility.btt.BluetoothHelper;
 
 public class BerandaActivity extends AppCompatActivity {
     CardView cvOrder, cvSetting;
@@ -37,26 +38,11 @@ public class BerandaActivity extends AppCompatActivity {
 //        hideSystemUI();
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        hideSystemUI();
         setContentView(R.layout.activity_beranda);
         SharedPreferences prefs = getSharedPreferences("kasir_prefs", MODE_PRIVATE);
         String lastAddress = prefs.getString("last_device_address", null);
 
-//        if (lastAddress != null) {
-//            new Thread(() -> {
-//                try {
-//                    BluetoothConnectionManager btManager = BluetoothConnectionManager.getInstance();
-//                    btManager.connect(lastAddress);
-//                    runOnUiThread(() ->
-//                                    Log.d("Blueetooth Koneksi", "Berhasil terhubung"));
-////                            pengaturan_bluetooth_status.setText("Terhubung otomatis"));
-//                } catch (IOException e) {
-//                    runOnUiThread(() ->
-////                            pengaturan_bluetooth_status.setText("Gagal reconnect"));
-//                            Log.d("Blueetooth Koneksi", "Gagal terhubung"));
-//
-//                }
-//            }).start();
-//        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -92,6 +78,9 @@ public class BerandaActivity extends AppCompatActivity {
             boolean connected = NetworkUtil.isConnectedToInternet(this);
             updateStatus(connected);
         }
+
+        BluetoothHelper.autoReconnect(this);
+
     }
 
     private void hideSystemUI() {

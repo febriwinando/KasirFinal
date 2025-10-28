@@ -174,6 +174,30 @@ public class DBHelper extends SQLiteOpenHelper {
         return total;
     }
 
+    public int getIdOrderitems(int order_id, int menuId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int id = 0;
+
+        // Gunakan fungsi agregat SUM() di SQL
+        Cursor cursor = db.rawQuery(
+                "SELECT id FROM order_items WHERE order_id = ? AND menu_id = ?",
+                new String[]{String.valueOf(order_id), String.valueOf(menuId)}
+        );
+
+        if (cursor.moveToFirst()) {
+            id = cursor.getInt(0);
+        }
+        cursor.close();
+        return id;
+    }
+
+    public boolean deleteOrderItemById(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result = db.delete(TABLE_ORDER_ITEMS, "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+        return result > 0; // true jika ada baris yang dihapus
+    }
+
 
     public void addOrUpdateOrderItem(int order_id, int menu_id, String nama_menu, int qty, String harga_satuan, String catatan) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -484,6 +508,19 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getMenus() {
         SQLiteDatabase db = this.getReadableDatabase(); // lebih baik untuk SELECT
         return db.rawQuery("SELECT * FROM " + TABLE_MENU, null);
+    }
+
+    public int getMenusReset(int id_menu) {
+        SQLiteDatabase db = this.getReadableDatabase(); // lebih baik untuk SELECT
+
+        int id = 0;
+        Cursor cursor = db.rawQuery("SELECT id FROM " + TABLE_MENU + " WHERE id = ? ", new String[]{String.valueOf(id_menu)});
+
+        if (cursor.moveToFirst()) {
+            id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+        }
+        cursor.close();
+        return id;
     }
 
 

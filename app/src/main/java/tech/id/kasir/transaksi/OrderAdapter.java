@@ -45,6 +45,7 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ListViewHol
     String no_meja;
     int penggunaId;
     String baseUrl = "http://172.15.1.92:8000/";
+    int orderIdAktif;
 
     public OrderAdapter(ArrayList<Menu> produks, Activity context, String no_meja) {
         OrderAdapter.produks = produks;
@@ -64,6 +65,7 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ListViewHol
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_row_produk_transaksi_dua, parent, false);
         return new ListViewHolder(view);
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull ListViewHolder holder, int position) {
@@ -98,11 +100,13 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ListViewHol
 
 
         Cursor cursorOrder = dbHelper.getOrdersByStatusAndMeja("diproses", no_meja);
+
         if (cursorOrder.moveToFirst()) {
-            int orderIdAktif = cursorOrder.getInt(cursorOrder.getColumnIndexOrThrow("id"));
+            orderIdAktif = cursorOrder.getInt(cursorOrder.getColumnIndexOrThrow("id"));
             int totalJumlah = dbHelper.getTotalJumlahByMenuId(orderIdAktif, viewProduk.getId());
             holder.tvJumlah.setText(String.valueOf(totalJumlah));
         } else {
+            orderIdAktif = 0;
             holder.tvJumlah.setText("0");
         }
         cursorOrder.close();
@@ -173,18 +177,46 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ListViewHol
         });
 
         holder.cvListTransaksi.setOnClickListener(v -> {
-            onItemClickCallback.onItemClicked(produks.get(holder.getAdapterPosition()));
+            if (cursorOrder.moveToFirst()) {
+//                int orderIdAktif = cursorOrder.getInt(cursorOrder.getColumnIndexOrThrow("id"));
+                int idOrderitems = dbHelper.getIdOrderitems(orderIdAktif, viewProduk.getId());
+                onItemClickCallback.onItemClicked(idOrderitems, Integer.parseInt(no_meja), viewProduk.getNama_produk());
+            }
+
 
         });
 
         holder.cvListTransaksi.setOnLongClickListener(v -> {
             if (onItemClickCallback != null) {
-                onItemClickCallback.onItemLongClicked(produks.get(holder.getAdapterPosition()));
+                if (cursorOrder.moveToFirst()) {
+                    int idOrderitems = dbHelper.getIdOrderitems(orderIdAktif, viewProduk.getId());
+                    onItemClickCallback.onItemLongClicked(idOrderitems);
+
+                }
             }
             return true; // penting supaya tidak tumpang tindih dengan klik biasa
         });
 
     }
+    public void updateItemJumlahToZero(int orderItemId) {
+        DBHelper dbHelper = new DBHelper(context);
+
+        for (int i = 0; i < produks.size(); i++) {
+            Menu menu = produks.get(i);
+
+            // ambil id order item berdasarkan menu id
+            int currentOrderItemId = dbHelper.getMenusReset(menu.getId());
+
+            if (currentOrderItemId == orderItemId) {
+                // ubah data jumlah di model menjadi 0
+                // beri tahu RecyclerView bahwa item ini berubah
+                notifyItemChanged(i);
+
+                break;
+            }
+        }
+    }
+
 
     @Override
     public int getItemCount() {
@@ -215,8 +247,8 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ListViewHol
 
 
     public interface OnItemClickCallback {
-        void onItemClicked(Menu data);
-        void onItemLongClicked(Menu data);
+        void onItemClicked(int id, int meja, String name_item);
+        void onItemLongClicked(int id);
     }
 
     public Filter getFilter() {

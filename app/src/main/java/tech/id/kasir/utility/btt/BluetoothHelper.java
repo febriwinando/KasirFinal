@@ -29,10 +29,6 @@ public class BluetoothHelper {
     private static final String TAG = "BluetoothHelper";
     private static final UUID BT_MODULE_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-    /**
-     * Melakukan reconnect otomatis ke perangkat terakhir yang tersimpan.
-     * Pastikan Bluetooth sudah aktif sebelum memanggil fungsi ini.
-     */
     public static void autoReconnect(Activity activity) {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 

@@ -4,55 +4,76 @@ import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import tech.id.kasir.R;
+import tech.id.kasir.database.DBHelper;
 
 public class DialogView {
-    Context context;
+    private Context context;
+    private DBHelper dbHelper;
+    private OnItemDeletedListener onItemDeletedListener;
 
     public DialogView(Context context) {
         this.context = context;
+        dbHelper = new DBHelper(context);
     }
 
-    public int viewTambahCatatan(){
-        Dialog dialogSukes = new Dialog(context, R.style.DialogStyle);
-        dialogSukes.setContentView(R.layout.dialog_item_notes);
-        dialogSukes.setCancelable(true);
-//        ImageView tvTutupDialog = dialogSukes.findViewById(R.id.tvTutupDialog);
-
-        final int[] tutup = {0};
-
-//        tvTutupDialog.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                tutup[0] = 1;
-//                dialogSukes.dismiss();
-//            }
-//        });
-
-        dialogSukes.show();
-        return tutup[0];
-
+    public interface OnItemDeletedListener {
+        void onItemDeleted(int deletedItemId);
     }
-    public int viewHapusItemOrder(){
+
+    // Setter listener
+    public void setOnItemDeletedListener(OnItemDeletedListener listener) {
+        this.onItemDeletedListener = listener;
+    }
+    public void viewHapusItemOrder(int id) {
         Dialog dialoghapus = new Dialog(context, R.style.DialogStyle);
         dialoghapus.setContentView(R.layout.view_hapus_item_order);
         dialoghapus.setCancelable(true);
+
         ImageView tvTutupDialog = dialoghapus.findViewById(R.id.tvTutupDialog);
+        TextView tvHapusItemOrder = dialoghapus.findViewById(R.id.tvHapusItemOrder);
 
-        final int[] tutup = {0};
+        tvHapusItemOrder.setOnClickListener(v -> {
+            dbHelper.deleteOrderItemById(id);
 
-        tvTutupDialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tutup[0] = 1;
-                dialoghapus.dismiss();
+            // panggil callback
+            if (onItemDeletedListener != null) {
+                onItemDeletedListener.onItemDeleted(id);
             }
+
+            dialoghapus.dismiss();
         });
 
+        tvTutupDialog.setOnClickListener(v -> dialoghapus.dismiss());
         dialoghapus.show();
-        return tutup[0];
-
     }
+//    public void viewHapusItemOrder(int id){
+//        Dialog dialoghapus = new Dialog(context, R.style.DialogStyle);
+//        dialoghapus.setContentView(R.layout.view_hapus_item_order);
+//        dialoghapus.setCancelable(true);
+//        ImageView tvTutupDialog = dialoghapus.findViewById(R.id.tvTutupDialog);
+//        TextView tvHapusItemOrder = dialoghapus.findViewById(R.id.tvHapusItemOrder);
+//
+//
+//        tvHapusItemOrder.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DBHelper dbHelper = new DBHelper(context);
+//                dbHelper.deleteOrderItemById(id);
+//                dialoghapus.dismiss();
+//            }
+//        });
+//        tvTutupDialog.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialoghapus.dismiss();
+//            }
+//        });
+//
+//        dialoghapus.show();
+//
+//    }
 
 }

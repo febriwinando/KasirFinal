@@ -113,10 +113,23 @@
                             android:textColor="@color/font_side"
                             android:text="Cari Perangkat"
                             android:textStyle="bold"
-
                             tools:ignore="RelativeOverlap" />
+                    </TableRow>
+                    <TableRow>
+                        <ProgressBar
+                            android:layout_gravity="center_horizontal"
+                            android:id="@+id/progressBarSearchBluetooth"
+                            style="?android:attr/progressBarStyleLarge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:indeterminate="true"
+                            android:visibility="gone"/>
 
-
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvListBluetooth"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            tools:listitem="@layout/view_list_bluetooth" />
                     </TableRow>
 
                     <TableRow
@@ -385,20 +398,7 @@
                             />
                     </com.google.android.material.textfield.TextInputLayout>
                 </TableLayout>
-                <ProgressBar
-                    android:layout_gravity="center_horizontal"
-                    android:id="@+id/progressBarSearchBluetooth"
-                    style="?android:attr/progressBarStyleLarge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:indeterminate="true"
-                    android:visibility="gone"/>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvListBluetooth"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:listitem="@layout/view_list_bluetooth" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </LinearLayout>

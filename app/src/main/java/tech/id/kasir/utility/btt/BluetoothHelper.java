@@ -5,77 +5,88 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
+import java.io.OutputStream;
 import java.util.UUID;
 
+import tech.id.kasir.utility.btt.BluetoothPermissionManager;
+
 public class BluetoothHelper {
-    private static final String PREFS_NAME = "kasir_prefs";
-    private static final String PREF_LAST_DEVICE = "last_device_address";
+
+    public static BluetoothSocket bluetoothSocket;
+    public static OutputStream outputStreamer;
+
     private static final String TAG = "BluetoothHelper";
+    private static final UUID BT_MODULE_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-    public static BluetoothSocket connectDevice(Activity context, BluetoothAdapter adapter,
-                                                String address, String name, Handler handler, UUID uuid) {
-        BluetoothSocket socket = null;
-        try {
-            BluetoothDevice device = adapter.getRemoteDevice(address);
-            socket = createSocket(context, device, uuid);
-            socket.connect();
+    /**
+     * Melakukan reconnect otomatis ke perangkat terakhir yang tersimpan.
+     * Pastikan Bluetooth sudah aktif sebelum memanggil fungsi ini.
+     */
+    public static void autoReconnect(Activity activity) {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-            // Simpan alamat terakhir yang berhasil
-            saveLastDevice(context, address);
-
-            handler.obtainMessage(UtilBluetooth.CONNECTING_STATUS, 1, -1, name).sendToTarget();
-            return socket;
-        } catch (IOException e) {
-            Log.e(TAG, "Connection failed", e);
-            handler.obtainMessage(UtilBluetooth.CONNECTING_STATUS, -1, -1).sendToTarget();
-            try { if (socket != null) socket.close(); } catch (IOException ignored) {}
-            return null;
+        if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
+            Toast.makeText(activity, "Bluetooth belum aktif", Toast.LENGTH_SHORT).show();
+            return;
         }
-    }
 
-    private static BluetoothSocket createSocket(Activity context, BluetoothDevice device, UUID uuid) throws IOException {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT)
-                == PackageManager.PERMISSION_DENIED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 100);
+        // 🟩 Pastikan permission sudah diberikan
+        BluetoothPermissionManager.ensurePermissions(activity, 1001);
+
+        // Jika permission belum diberikan, jangan lanjut
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.BLUETOOTH_CONNECT)
+                    != PackageManager.PERMISSION_GRANTED) {
+                Log.w(TAG, "Permission BLUETOOTH_CONNECT belum diberikan");
+                return;
             }
         }
-        try {
-            Method m = device.getClass().getMethod("createInsecureRfcommSocketToServiceRecord", UUID.class);
-            return (BluetoothSocket) m.invoke(device, uuid);
-        } catch (Exception e) {
-            Log.e(TAG, "Could not create insecure socket", e);
-            return device.createRfcommSocketToServiceRecord(uuid);
+
+        SharedPreferences prefs = activity.getSharedPreferences("kasir_prefs", Context.MODE_PRIVATE);
+        String lastAddress = prefs.getString("last_device_address", null);
+
+        if (lastAddress == null) {
+            Log.d(TAG, "Tidak ada perangkat terakhir yang tersimpan");
+            return;
         }
-    }
 
-    private static void saveLastDevice(Activity context, String address) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Activity.MODE_PRIVATE);
-        prefs.edit().putString(PREF_LAST_DEVICE, address).apply();
-    }
+        BluetoothDevice device = bluetoothAdapter.getRemoteDevice(lastAddress);
 
-    public static String getLastDevice(Activity context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Activity.MODE_PRIVATE);
-        return prefs.getString(PREF_LAST_DEVICE, null);
-    }
+        // 🟩 Aman dipanggil karena permission sudah dicek di atas
+        String deviceName = (device.getName() != null) ? device.getName() : "Perangkat Tidak Dikenal";
+        Log.d(TAG, "Mencoba reconnect ke: " + deviceName + " (" + lastAddress + ")");
 
-    public static boolean autoConnectIfAvailable(Activity context, BluetoothAdapter adapter, Handler handler, UUID uuid) {
-        String lastAddress = getLastDevice(context);
-        if (lastAddress != null) {
-            BluetoothSocket socket = connectDevice(context, adapter, lastAddress, "Auto Connect", handler, uuid);
-            return socket != null && socket.isConnected();
-        }
-        return false;
+        new Thread(() -> {
+            try {
+                bluetoothSocket = device.createRfcommSocketToServiceRecord(BT_MODULE_UUID);
+                bluetoothSocket.connect();
+
+                if (bluetoothSocket.isConnected()) {
+                    outputStreamer = bluetoothSocket.getOutputStream();
+                    Log.d(TAG, "Reconnect berhasil ke " + deviceName);
+                    activity.runOnUiThread(() ->
+                            Toast.makeText(activity, "Terhubung ke " + deviceName, Toast.LENGTH_SHORT).show());
+                }
+
+            } catch (IOException e) {
+                Log.e(TAG, "Gagal reconnect: " + e.getMessage());
+                try {
+                    if (bluetoothSocket != null) bluetoothSocket.close();
+                } catch (IOException ex) {
+                    Log.e(TAG, "Gagal menutup socket: " + ex.getMessage());
+                }
+            }
+        }).start();
     }
 }

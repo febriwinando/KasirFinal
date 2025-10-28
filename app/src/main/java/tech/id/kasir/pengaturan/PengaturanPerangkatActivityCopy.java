@@ -1,7 +1,6 @@
 package tech.id.kasir.pengaturan;
 
 import static android.content.ContentValues.TAG;
-import static tech.id.kasir.utility.btt.BluetoothHelper.autoReconnect;
 import static tech.id.kasir.utility.btt.UtilBluetooth.CONNECTING_STATUS;
 import static tech.id.kasir.utility.btt.UtilBluetooth.MESSAGE_READ;
 
@@ -11,7 +10,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,14 +49,13 @@ import java.util.Set;
 import java.util.UUID;
 
 import tech.id.kasir.R;
-import tech.id.kasir.utility.btt.CashDrawerHelper;
 import tech.id.kasir.utility.btt.ConnectedThread;
 import tech.id.kasir.utility.btt.DaftarBluetoothAdapter;
 import tech.id.kasir.utility.btt.ModelListBluetooth;
 import tech.id.kasir.utility.btt.SintaksPOST;
 import tech.id.kasir.utility.btt.UtilBluetooth;
 
-public class PengaturanPerangkatActivity extends AppCompatActivity {
+public class PengaturanPerangkatActivityCopy extends AppCompatActivity {
 
     private TableRow cariPerangkat, ujiPrinter;
     private ImageView ivKembaliDariPengaturanPerangkat;
@@ -99,11 +96,11 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
 
         initViews();
 
-        if (ContextCompat.checkSelfPermission(PengaturanPerangkatActivity.this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED)
+        if (ContextCompat.checkSelfPermission(PengaturanPerangkatActivityCopy.this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED)
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
             {
-                ActivityCompat.requestPermissions(PengaturanPerangkatActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 2);
+                ActivityCompat.requestPermissions(PengaturanPerangkatActivityCopy.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 2);
             }
         }
 
@@ -135,7 +132,7 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
                     if (!bluetoothAdapter.isEnabled()){
                         nyalakanBluetooh();
                     }else{
-                        Toast.makeText(PengaturanPerangkatActivity.this, "Bluetooth Telah Aktif", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PengaturanPerangkatActivityCopy.this, "Bluetooth Telah Aktif", Toast.LENGTH_SHORT).show();
                     }
                 }else{
                     switchOnOffBluetooth.setChecked(true);
@@ -156,8 +153,8 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                sintaksPOST.bill(PengaturanPerangkatActivity.this, bluetoothSocket, outputStreamer);
-                CashDrawerHelper.open(outputStreamer);
+                sintaksPOST.bill(PengaturanPerangkatActivityCopy.this, bluetoothSocket, outputStreamer);
+                openCashDrawer();
                 Toast.makeText(this, ""+bluetoothSocket, Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(this, "Belum Terhubung", Toast.LENGTH_SHORT).show();
@@ -178,7 +175,6 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
                     this::finish
             );
         }
-        autoReconnect(PengaturanPerangkatActivity.this);
 
     }
 
@@ -210,11 +206,11 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
     private void listPairedDevices(){
         listNameBluetooth.clear();
         listAddressBluetooth.clear();
-        if (ContextCompat.checkSelfPermission(PengaturanPerangkatActivity.this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED)
+        if (ContextCompat.checkSelfPermission(PengaturanPerangkatActivityCopy.this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED)
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
             {
-                ActivityCompat.requestPermissions(PengaturanPerangkatActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 2);
+                ActivityCompat.requestPermissions(PengaturanPerangkatActivityCopy.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 2);
             }
         }
 
@@ -222,10 +218,10 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
         Set<BluetoothDevice> mPairedDevices = bluetoothAdapter.getBondedDevices();
         if(bluetoothAdapter.isEnabled()) {
             // put it's one to the adapter
+
             if (mPairedDevices.size() > 0 ){
 //                tvInfoDaftarBluetoothPerangkat.setVisibility(View.VISIBLE);
             }
-
             for (BluetoothDevice device : mPairedDevices){
 
                 listNameBluetooth.add(device.getName());
@@ -245,25 +241,25 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
 
     }
 
-//    public void openCashDrawer() {
-//        try {
-//            byte[] bytes = intArrayToByteArray(new int[]{27, 112, 0, 50, 250});
-//            outputStreamer.write(bytes);
-//            //            return true;
-//        } catch (IOException e) {
-//            Log.e(TAG, "Open drawer error", e);
-//            //            return false;
-//        }
-//
-//    }
-//
-//    private byte[] intArrayToByteArray(int[] Iarr) {
-//        byte[] bytes = new byte[Iarr.length];
-//        for (int i = 0; i < Iarr.length; i++) {
-//            bytes[i] = (byte) (Iarr[i] & 0xFF);
-//        }
-//        return bytes;
-//    }
+    public void openCashDrawer() {
+        try {
+            byte[] bytes = intArrayToByteArray(new int[]{27, 112, 0, 50, 250});
+            outputStreamer.write(bytes);
+            //            return true;
+        } catch (IOException e) {
+            Log.e(TAG, "Open drawer error", e);
+            //            return false;
+        }
+
+    }
+
+    private byte[] intArrayToByteArray(int[] Iarr) {
+        byte[] bytes = new byte[Iarr.length];
+        for (int i = 0; i < Iarr.length; i++) {
+            bytes[i] = (byte) (Iarr[i] & 0xFF);
+        }
+        return bytes;
+    }
 
     private void showRecyclerList(){
 
@@ -285,7 +281,7 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
                     utilBluetooth.finishConnected(bluetoothSocket, outputStreamer);
                 }
 
-                menghubungkanPerangkatBLuetooth(data.getAddress_bluetooth(), data.getNama_bluetooth(), PengaturanPerangkatActivity.this);
+                menghubungkanPerangkatBLuetooth(data.getAddress_bluetooth(), data.getNama_bluetooth(), PengaturanPerangkatActivityCopy.this);
 
             }
         });
@@ -320,10 +316,6 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
 
                     if (bluetoothSocket.isConnected()){
                         rvListBluetooth.setVisibility(View.GONE);
-                        // 🟩 Tambahan: simpan alamat printer terakhir
-                        SharedPreferences prefs = context.getSharedPreferences("kasir_prefs", MODE_PRIVATE);
-                        prefs.edit().putString("last_device_address", addresBLuetoothPerangkat).apply();
-
                     }
 //                    bluetoothSocket.getMaxTransmitPacketSize();
                     bluetoothSocket.getMaxTransmitPacketSize();
@@ -399,11 +391,11 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
     }
 
     public void nyalakanBluetooh(){
-        if (ContextCompat.checkSelfPermission(PengaturanPerangkatActivity.this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED)
+        if (ContextCompat.checkSelfPermission(PengaturanPerangkatActivityCopy.this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED)
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
             {
-                ActivityCompat.requestPermissions(PengaturanPerangkatActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_ENABLE_BT);
+                ActivityCompat.requestPermissions(PengaturanPerangkatActivityCopy.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_ENABLE_BT);
             }
         }
 
@@ -415,11 +407,11 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if (ContextCompat.checkSelfPermission(PengaturanPerangkatActivity.this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED)
+        if (ContextCompat.checkSelfPermission(PengaturanPerangkatActivityCopy.this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED)
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
             {
-                ActivityCompat.requestPermissions(PengaturanPerangkatActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 2);
+                ActivityCompat.requestPermissions(PengaturanPerangkatActivityCopy.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 2);
             }
 
 
@@ -432,8 +424,5 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
                 switchOnOffBluetooth.setChecked(true);
             }
         }
-
-        autoReconnect(PengaturanPerangkatActivity.this);
-
     }
 }

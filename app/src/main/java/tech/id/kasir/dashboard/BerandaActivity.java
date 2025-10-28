@@ -1,14 +1,22 @@
 package tech.id.kasir.dashboard;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
@@ -17,7 +25,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.io.IOException;
 
+import tech.id.kasir.MainActivity;
 import tech.id.kasir.R;
+import tech.id.kasir.network.NetworkUtil;
 import tech.id.kasir.pengaturan.PengaturanPerangkatActivity;
 
 public class BerandaActivity extends AppCompatActivity {
@@ -73,6 +83,15 @@ public class BerandaActivity extends AppCompatActivity {
                 startActivity(settingPerangkat);
             }
         });
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            registerNetworkCallback();
+        } else {
+            // Untuk versi lama, lakukan pengecekan manual
+            boolean connected = NetworkUtil.isConnectedToInternet(this);
+            updateStatus(connected);
+        }
     }
 
     private void hideSystemUI() {
@@ -85,4 +104,45 @@ public class BerandaActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
     }
 
+//    private TextView tvStatus;
+    private ConnectivityManager.NetworkCallback networkCallback;
+    private ConnectivityManager connectivityManager;
+
+    private void registerNetworkCallback() {
+        networkCallback = new ConnectivityManager.NetworkCallback() {
+            @Override
+            public void onAvailable(@NonNull Network network) {
+                runOnUiThread(() -> {
+                    updateStatus(true);
+                    Toast.makeText(BerandaActivity.this, "Koneksi Internet Aktif", Toast.LENGTH_SHORT).show();
+                });
+            }
+
+            @Override
+            public void onLost(@NonNull Network network) {
+                runOnUiThread(() -> {
+                    updateStatus(false);
+                    Toast.makeText(BerandaActivity.this, "Koneksi Internet Terputus", Toast.LENGTH_SHORT).show();
+                });
+            }
+        };
+
+        connectivityManager.registerDefaultNetworkCallback(networkCallback);
+    }
+
+    private void updateStatus(boolean connected) {
+        if (connected) {
+            Toast.makeText(this, "✅ Terhubung ke Internet", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "❌ Tidak ada koneksi Internet", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (connectivityManager != null && networkCallback != null) {
+            connectivityManager.unregisterNetworkCallback(networkCallback);
+        }
+    }
 }

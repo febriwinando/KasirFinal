@@ -47,4 +47,10 @@ public interface api_transakasi_data {
     @DELETE("orders/{id}")
     Call<ApiResponse> deleteOrder(@Path("id") int id);
 
+    @FormUrlEncoded
+    @POST("save-token")
+    Call<ApiResponse> saveToken(
+            @Field("user_id") int userId,
+            @Field("token") String token
+    );
 }

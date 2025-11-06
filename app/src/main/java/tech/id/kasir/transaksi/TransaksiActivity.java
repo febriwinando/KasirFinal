@@ -1,6 +1,5 @@
 package tech.id.kasir.transaksi;
 
-import android.bluetooth.BluetoothSocket;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,7 +34,7 @@ import java.util.Objects;
 import tech.id.kasir.R;
 import tech.id.kasir.database.DBHelper;
 import tech.id.kasir.response_api.OrderItemRequest;
-import tech.id.kasir.utility.btt.ModelProdukFinalTransaksi;
+import tech.id.kasir.utility.btt.CashDrawerHelper;
 import tech.id.kasir.utility.btt.SintaksPOST;
 import tech.id.kasir.utility.btt.UtilBluetooth;
 import static tech.id.kasir.pengaturan.PengaturanPerangkatActivity.bluetoothSocket;
@@ -187,7 +185,7 @@ public class TransaksiActivity extends AppCompatActivity {
                         outputStreamer, "pengunjung", invoice, today, "costumer", formatRupiah.format(total), formatRupiah.format(total),
                         formatRupiah.format(uangDiterima), String.valueOf(uang_kembali), formatRupiah.format(total), status);
 
-                sintaksPOST.openCashDrawer(outputStreamer);
+                CashDrawerHelper.open(outputStreamer);
             }else{
 
                 Toast.makeText(this, "Gagal", Toast.LENGTH_SHORT).show();

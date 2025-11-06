@@ -13,6 +13,10 @@ annotations = "5.0.5"
 glide = "5.0.5"
 materialVersion = "1.14.0-alpha05"
 eazegraph = "1.2.5l"
+comGoogleGmsGoogleServicesGradlePlugin = "4.4.4"
+firebaseBom = "34.5.0"
+firebaseAnalytics = "23.0.0"
+firebaseMessaging = "25.0.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -28,6 +32,10 @@ annotations = { group = "com.github.bumptech.glide", name = "annotations", versi
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 google-material = { group = "com.google.android.material", name = "material", version = "1.14.0-alpha06" }
 eazegraph = { group = "com.github.blackfizz", name = "eazegraph", version.ref = "eazegraph" }
+com-google-gms-google-services-gradle-plugin = { group = "com.google.gms.google-services", name = "com.google.gms.google-services.gradle.plugin", version.ref = "comGoogleGmsGoogleServicesGradlePlugin" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".pengaturan.PengaturanPerangkatActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/main"
+    android:background="@color/color_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,17 +29,16 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_left"
-                android:contentDescription="TODO"
-                android:layout_marginEnd="5dp"
-                app:tint="@color/color7" />
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:text="Pengaturan Perangkat"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@color/font_side"/>
+                android:textColor="@color/text_color"/>
         </LinearLayout>
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -55,7 +54,6 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp">
-
                     <TableRow
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -68,18 +66,17 @@
                             android:layout_height="25dp"
                             android:src="@drawable/bluetooth"
                             android:layout_marginEnd="10dp"
-                            android:contentDescription="TODO"
                             android:layout_gravity="center_vertical"
-                            app:tint="@color/color7"
                             />
                         <Switch
                             android:id="@+id/switchOnOffBluetooth"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:textColor="@color/font_side"
+                            android:textColor="@color/text_color"
                             android:text="Bluetooth"
                             android:textStyle="bold"
+
                             android:gravity="left"
                             tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml"
                             android:checked="false"
@@ -101,35 +98,20 @@
                             android:layout_height="25dp"
                             android:src="@drawable/listbtt"
                             android:layout_marginEnd="10dp"
-                            android:contentDescription="TODO"
                             android:layout_gravity="center_vertical"
-                            app:tint="@color/color7"
                             />
                         <TextView
                             android:layout_gravity="center_vertical"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:textColor="@color/font_side"
+                            android:textColor="@color/text_color"
                             android:text="Cari Perangkat"
                             android:textStyle="bold"
-                            tools:ignore="RelativeOverlap" />
-                    </TableRow>
-                    <TableRow>
-                        <ProgressBar
-                            android:layout_gravity="center_horizontal"
-                            android:id="@+id/progressBarSearchBluetooth"
-                            style="?android:attr/progressBarStyleLarge"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:indeterminate="true"
-                            android:visibility="gone"/>
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rvListBluetooth"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            tools:listitem="@layout/view_list_bluetooth" />
+                            tools:ignore="RelativeOverlap" />
+
+
                     </TableRow>
 
                     <TableRow
@@ -146,7 +128,6 @@
                             android:layout_height="25dp"
                             android:src="@drawable/bluetooth_pairing"
                             android:layout_gravity="center_vertical"
-                            app:tint="@color/color7"
                             />
 
                         <TextView
@@ -157,7 +138,7 @@
                             android:maxLines="1"
                             android:text="Perangkat Terhubung"
                             android:textStyle="bold"
-                            android:textColor="@color/font_side"
+                            android:textColor="@color/text_color"
                             android:textSize="16sp"
 
                             android:layout_gravity="center_vertical"
@@ -195,16 +176,14 @@
                             android:layout_height="25dp"
                             android:src="@drawable/print_svgrepo_com"
                             android:layout_marginEnd="10dp"
-                            android:contentDescription="TODO"
-                            app:tint="@color/color7"
                             />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:textColor="@color/font_side"
-                            android:text="Tes Printer"
+                            android:textColor="@color/text_color"
+                            android:text="Uji Printer"
                             android:textStyle="bold"
 
                             android:layout_gravity="center_vertical"
@@ -215,7 +194,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/font_side"/>
+                    android:background="@color/text_color"/>
 
                 <TableLayout
                     android:layout_width="match_parent"
@@ -235,8 +214,7 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:src="@drawable/cash_register_svgrepo_com"
-                            android:layout_marginEnd="10dp"
-                            app:tint="@color/color7"/>
+                            android:layout_marginEnd="10dp"/>
                         <Switch
 
                             android:layout_weight="1"
@@ -245,10 +223,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:textColor="@color/font_side"
-                            android:text="Cash Drawer"
+                            android:textColor="@color/text_color"
+                            android:text="Cashdrawer"
                             android:textStyle="bold"
-                            app:tint="@color/color7"
+
                             android:layout_gravity="center_vertical"
                             tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml"
                             android:checked="false"/>
@@ -267,7 +245,6 @@
                             android:src="@drawable/barcode_scanner_svgrepo_com"
                             android:layout_marginEnd="10dp"
                             android:layout_gravity="center_vertical"
-                            app:tint="@color/color7"
                             />
 
                         <Switch
@@ -277,10 +254,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:checked="false"
-                            app:tint="@color/color7"
+
                             android:gravity="left"
                             android:text="Barcode"
-                            android:textColor="@color/font_side"
+                            android:textColor="@color/text_color"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
@@ -290,7 +267,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/font_side"/>
+                    android:background="@color/text_color"/>
                 <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -311,7 +288,6 @@
                             android:src="@drawable/store_bxs_alt"
                             android:layout_marginEnd="10dp"
                             android:layout_gravity="center_vertical"
-                            app:tint="@color/color7"
                             />
                         <Switch
                             android:layout_weight="1"
@@ -319,8 +295,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:textColor="@color/font_side"
-                            android:text="Store"
+                            android:textColor="@color/text_color"
+                            android:text="Model Restoran"
                             android:textStyle="bold"
 
                             android:gravity="left"
@@ -340,8 +316,8 @@
                         app:hintAnimationEnabled="true"
                         app:startIconDrawable="@drawable/table_svgrepo_com"
                         app:hintTextColor="@color/font_side"
-                        app:endIconTint="@color/font_side"
-                        app:startIconTint="@color/color7"
+                        app:endIconTint="@color/text_color"
+                        app:startIconTint="@color/text_color"
                         android:textColorHint="@color/font_side"
                         app:boxStrokeColor="@color/font_side" android:layout_marginTop="15dp"
                         >
@@ -375,8 +351,8 @@
                         app:hintAnimationEnabled="true"
                         app:startIconDrawable="@drawable/ic_tax"
                         app:hintTextColor="@color/font_side"
-                        app:endIconTint="@color/font_side"
-                        app:startIconTint="@color/color7"
+                        app:endIconTint="@color/text_color"
+                        app:startIconTint="@color/text_color"
                         android:textColorHint="@color/font_side"
                         app:boxStrokeColor="@color/font_side" android:layout_marginTop="15dp"
                         >
@@ -392,14 +368,26 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textSize="16sp"
-
                             android:textColor="@color/temaapp"
                             android:textStyle="bold"
                             />
                     </com.google.android.material.textfield.TextInputLayout>
                 </TableLayout>
+                <ProgressBar
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/progressBarSearchBluetooth"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:visibility="gone"/>
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvListBluetooth"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:listitem="@layout/view_list_bluetooth" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

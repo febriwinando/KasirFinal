@@ -1,7 +1,7 @@
 package tech.id.kasir.pengaturan;
 
 import static android.content.ContentValues.TAG;
-import static tech.id.kasir.utility.btt.BluetoothHelper.autoReconnect;
+
 import static tech.id.kasir.utility.btt.UtilBluetooth.CONNECTING_STATUS;
 import static tech.id.kasir.utility.btt.UtilBluetooth.MESSAGE_READ;
 
@@ -11,7 +11,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,8 +18,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -29,20 +29,20 @@ import android.widget.Switch;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.window.OnBackInvokedDispatcher;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
-import androidx.core.os.BuildCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
@@ -54,41 +54,43 @@ import tech.id.kasir.R;
 import tech.id.kasir.utility.btt.CashDrawerHelper;
 import tech.id.kasir.utility.btt.ConnectedThread;
 import tech.id.kasir.utility.btt.DaftarBluetoothAdapter;
+import tech.id.kasir.utility.btt.InputConnectThread;
 import tech.id.kasir.utility.btt.ModelListBluetooth;
 import tech.id.kasir.utility.btt.SintaksPOST;
 import tech.id.kasir.utility.btt.UtilBluetooth;
 
 public class PengaturanPerangkatActivity extends AppCompatActivity {
 
-    private TableRow cariPerangkat, ujiPrinter;
-    private ImageView ivKembaliDariPengaturanPerangkat;
-
-    private String barcode = "";
-    private ArrayAdapter<String> mBTArrayAdapter;
-    UUID sppUuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    public static Handler mHandler;
-    public static BluetoothDevice bluetoothDevice;
-    private static final int REQUEST_ENABLE_BT = 1;
-    Switch switchOnOffBluetooth;
-    public  static BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    public static ConnectedThread mConnectedThread;
-    DaftarBluetoothAdapter listBluetoothAdapter;
-    UtilBluetooth utilBluetooth = new UtilBluetooth();
-    SintaksPOST sintaksPOST = new SintaksPOST();
-    ProgressBar progressBarSearchBluetooth;
     private static ArrayList<ModelListBluetooth> listBluetooth = new ArrayList<>();
     static ArrayList<String> listNameBluetooth = new ArrayList<String>();
     static ArrayList<String> listAddressBluetooth = new ArrayList<String>();
-    static RecyclerView rvListBluetooth;
+    Switch switchOnOffBluetooth, switchCashDrawer, switchBarcode, switchTipeStore;
+    private static final int REQUEST_ENABLE_BT = 1;
+    TableRow cariPerangkat, ujiPrinter;
+    ProgressBar progressBarSearchBluetooth;
+    RecyclerView rvListBluetooth;
+    TextView pengaturan_bluetooth_status;
+    InputConnectThread inputConnectThread;
+    ImageView ivKembaliDariPengaturanPerangkat;
+    private ArrayAdapter<String> mBTArrayAdapter;
+    public  static BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    Set<BluetoothDevice> devices;
+    public static Handler mHandler;
+    private Set<BluetoothDevice> mPairedDevices;
+    UtilBluetooth utilBluetooth = new UtilBluetooth();
     public static BluetoothSocket bluetoothSocket = null;
     public static OutputStream outputStreamer;
-    TextView pengaturan_bluetooth_status;
+    SintaksPOST sintaksPOST = new SintaksPOST();
+    private InputStream mInputStream;
+    DaftarBluetoothAdapter listBluetoothAdapter;
+    public static BluetoothDevice bluetoothDevice;
+    public static ConnectedThread mConnectedThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        hideSystemUI();
         setContentView(R.layout.activity_pengaturan_perangkat);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -96,8 +98,6 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        initViews();
 
         if (ContextCompat.checkSelfPermission(PengaturanPerangkatActivity.this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED)
         {
@@ -108,7 +108,36 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
         }
 
 
+        listNameBluetooth.clear();
+        listAddressBluetooth.clear();
+        listBluetooth.clear();
+
+
+        cariPerangkat = findViewById(R.id.cariPerangkat);
+        progressBarSearchBluetooth = findViewById(R.id.progressBarSearchBluetooth);
+        rvListBluetooth= findViewById(R.id.rvListBluetooth);
+        pengaturan_bluetooth_status = findViewById(R.id.pengaturan_bluetooth_status);
+        ujiPrinter = findViewById(R.id.ujiPrinter);
+        switchOnOffBluetooth = findViewById(R.id.switchOnOffBluetooth);
+        ivKembaliDariPengaturanPerangkat = findViewById(R.id.ivKembaliDariPengaturanPerangkat);
+
         mBTArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        devices = bluetoothAdapter.getBondedDevices();
+
+        cariPerangkat.setOnClickListener(v -> {
+                    progressBarSearchBluetooth.setVisibility(View.VISIBLE);
+                    listPairedDevices();
+                }
+        );
+
+
+        if (!bluetoothAdapter.isEnabled()) {
+            switchOnOffBluetooth.setChecked(false);
+        } else {
+            switchOnOffBluetooth.setChecked(true);
+        }
+
+
         mHandler = new Handler(Looper.getMainLooper()){
             @Override
             public void handleMessage(Message msg){
@@ -120,9 +149,10 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
                 if(msg.what == CONNECTING_STATUS){
                     if(msg.arg1 == 1){
                         pengaturan_bluetooth_status.setText((CharSequence) msg.obj);
+                        Toast.makeText(PengaturanPerangkatActivity.this, (CharSequence) msg.obj, Toast.LENGTH_SHORT).show();
                     }
                     else{
-                        pengaturan_bluetooth_status.setText("Gagal Menghubungkan Bluetooth");
+                        pengaturan_bluetooth_status.setText("Gagal terhubung");
                     }
                 }
             }
@@ -135,7 +165,7 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
                     if (!bluetoothAdapter.isEnabled()){
                         nyalakanBluetooh();
                     }else{
-                        Toast.makeText(PengaturanPerangkatActivity.this, "Bluetooth Telah Aktif", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PengaturanPerangkatActivity.this, "Bluetooth Sudah dinyalakan", Toast.LENGTH_SHORT).show();
                     }
                 }else{
                     switchOnOffBluetooth.setChecked(true);
@@ -143,11 +173,18 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
             }
         });
 
-        cariPerangkat.setOnClickListener(v -> {
-                    progressBarSearchBluetooth.setVisibility(View.VISIBLE);
-                    listPairedDevices();
-                }
-        );
+        if (bluetoothAdapter == null) {
+            // Perangkat tidak mendukung Bluetooth
+        }
+
+        mPairedDevices = bluetoothAdapter.getBondedDevices();
+
+        ivKembaliDariPengaturanPerangkat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         ujiPrinter.setOnClickListener(v -> {
             if (utilBluetooth.isConnected(bluetoothSocket)){
@@ -166,47 +203,17 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
 
         });
 
-        ivKembaliDariPengaturanPerangkat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        if (BuildCompat.isAtLeastT()) {
-            getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
-                    OnBackInvokedDispatcher.PRIORITY_DEFAULT,
-                    this::finish
-            );
-        }
-        autoReconnect(PengaturanPerangkatActivity.this);
-
     }
 
-    private void initViews() {
-        cariPerangkat = findViewById(R.id.cariPerangkat);
-        ujiPrinter = findViewById(R.id.ujiPrinter);
-        progressBarSearchBluetooth = findViewById(R.id.progressBarSearchBluetooth);
-        rvListBluetooth = findViewById(R.id.rvListBluetooth);
-        pengaturan_bluetooth_status = findViewById(R.id.pengaturan_bluetooth_status);
-        ivKembaliDariPengaturanPerangkat = findViewById(R.id.ivKembaliDariPengaturanPerangkat);
-        switchOnOffBluetooth = findViewById(R.id.switchOnOffBluetooth);
-
-
+    private void hideSystemUI() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_LAYOUT_FLAGS
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOptions);
     }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent e) {
-        if (e.getAction() == KeyEvent.ACTION_DOWN) {
-            char pressedKey = (char) e.getUnicodeChar();
-            barcode += pressedKey;
-        }
-        if (e.getAction() == KeyEvent.ACTION_DOWN && e.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-            pengaturan_bluetooth_status.setText(barcode);
-            barcode = "";
-        }
-        return super.dispatchKeyEvent(e);
-    }
-
     private void listPairedDevices(){
         listNameBluetooth.clear();
         listAddressBluetooth.clear();
@@ -222,10 +229,10 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
         Set<BluetoothDevice> mPairedDevices = bluetoothAdapter.getBondedDevices();
         if(bluetoothAdapter.isEnabled()) {
             // put it's one to the adapter
+
             if (mPairedDevices.size() > 0 ){
 //                tvInfoDaftarBluetoothPerangkat.setVisibility(View.VISIBLE);
             }
-
             for (BluetoothDevice device : mPairedDevices){
 
                 listNameBluetooth.add(device.getName());
@@ -233,9 +240,10 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
                 mBTArrayAdapter.add(device.getName() + "\n" + device.getAddress());
             }
 
+//            Toast.makeText(getApplicationContext(), getString(R.string.show_paired_devices), Toast.LENGTH_SHORT).show();
         }
         else{
-            Toast.makeText(getApplicationContext(), "Bluetooth Tidak Menyala", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Bluetooth tidak menyala", Toast.LENGTH_SHORT).show();
         }
 
         listBluetooth.clear();
@@ -243,27 +251,8 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
 
         showRecyclerList();
 
+        inputConnectThread = new InputConnectThread(mInputStream);
     }
-
-//    public void openCashDrawer() {
-//        try {
-//            byte[] bytes = intArrayToByteArray(new int[]{27, 112, 0, 50, 250});
-//            outputStreamer.write(bytes);
-//            //            return true;
-//        } catch (IOException e) {
-//            Log.e(TAG, "Open drawer error", e);
-//            //            return false;
-//        }
-//
-//    }
-//
-//    private byte[] intArrayToByteArray(int[] Iarr) {
-//        byte[] bytes = new byte[Iarr.length];
-//        for (int i = 0; i < Iarr.length; i++) {
-//            bytes[i] = (byte) (Iarr[i] & 0xFF);
-//        }
-//        return bytes;
-//    }
 
     private void showRecyclerList(){
 
@@ -291,11 +280,12 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
         });
     }
 
-    public static void menghubungkanPerangkatBLuetooth(String addresBLuetoothPerangkat, String namaPerangkat, Activity context){
+    public static final boolean menghubungkanPerangkatBLuetooth(String addresBLuetoothPerangkat, String namaPerangkat, Activity context){
         final boolean[] fail = {false};
 
         new Thread()
         {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void run() {
 
@@ -319,11 +309,8 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
                     bluetoothSocket.connect();
 
                     if (bluetoothSocket.isConnected()){
-                        rvListBluetooth.setVisibility(View.GONE);
-                        // 🟩 Tambahan: simpan alamat printer terakhir
-                        SharedPreferences prefs = context.getSharedPreferences("kasir_prefs", MODE_PRIVATE);
-                        prefs.edit().putString("last_device_address", addresBLuetoothPerangkat).apply();
-
+//                        Toast.makeText(PengaturanPerangkatActivity.this, "Berhasil", Toast.LENGTH_SHORT).show();
+//                        bluetooth_status.setText("Berhasil");
                     }
 //                    bluetoothSocket.getMaxTransmitPacketSize();
                     bluetoothSocket.getMaxTransmitPacketSize();
@@ -349,6 +336,7 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
             }
         }.start();
 
+        return !fail[0];
     }
 
     private static BluetoothSocket createBluetoothSocket(BluetoothDevice device, Activity context) throws IOException {
@@ -385,11 +373,6 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_ENABLE_BT) {
             if (resultCode == RESULT_OK) {
-                if (bluetoothAdapter.isEnabled()) {
-                    switchOnOffBluetooth.setChecked(true);
-                }else{
-                    switchOnOffBluetooth.setChecked(false);
-                }
                 // Izin akses Bluetooth diberikan, lanjutkan dengan operasi Bluetooth yang diinginkan
             } else {
 
@@ -403,37 +386,11 @@ public class PengaturanPerangkatActivity extends AppCompatActivity {
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
             {
-                ActivityCompat.requestPermissions(PengaturanPerangkatActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_ENABLE_BT);
+                ActivityCompat.requestPermissions(PengaturanPerangkatActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 2);
             }
         }
 
         Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (ContextCompat.checkSelfPermission(PengaturanPerangkatActivity.this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED)
-        {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-            {
-                ActivityCompat.requestPermissions(PengaturanPerangkatActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 2);
-            }
-
-
-        }else{
-            if (!bluetoothAdapter.isEnabled()){
-                switchOnOffBluetooth.setChecked(false);
-
-                nyalakanBluetooh();
-            }else{
-                switchOnOffBluetooth.setChecked(true);
-            }
-        }
-
-        autoReconnect(PengaturanPerangkatActivity.this);
-
     }
 }

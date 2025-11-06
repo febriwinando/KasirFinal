@@ -44,7 +44,7 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ListViewHol
     String statusOrder;
     String no_meja;
     int penggunaId;
-    String baseUrl = "http://172.15.1.92:8000/";
+    String baseUrl = "http://172.15.1.36:8000/";
     int orderIdAktif;
 
     public OrderAdapter(ArrayList<Menu> produks, Activity context, String no_meja) {

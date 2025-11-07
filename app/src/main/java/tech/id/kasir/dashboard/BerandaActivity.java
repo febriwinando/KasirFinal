@@ -36,9 +36,10 @@ import tech.id.kasir.firebase.MyFirebaseMessagingService;
 import tech.id.kasir.network.NetworkUtil;
 import tech.id.kasir.pengaturan.PengaturanPerangkatActivity;
 import tech.id.kasir.response_api.ApiResponse;
+import tech.id.kasir.warung.TambahWarungActivity;
 
 public class BerandaActivity extends AppCompatActivity {
-    CardView cvOrder, cvSetting;
+    CardView cvOrder, cvSetting, cvTambahProduk;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 //        hideSystemUI();
@@ -59,7 +60,15 @@ public class BerandaActivity extends AppCompatActivity {
 
         cvSetting = findViewById(R.id.cvSetting);
         cvOrder = findViewById(R.id.cvOrder);
+        cvTambahProduk = findViewById(R.id.cvTambahProduk);
 
+        cvTambahProduk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent tambahwarung = new Intent(BerandaActivity.this, TambahWarungActivity.class);
+                startActivity(tambahwarung);
+            }
+        });
         cvOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

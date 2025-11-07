@@ -29,6 +29,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_left"
+                app:tint="@color/color4"
                 />
 
             <TextView

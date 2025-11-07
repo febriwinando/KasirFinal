@@ -28,6 +28,7 @@ android:background="@color/color_background"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_left"
+            app:tint="@color/color5"
             android:id="@+id/ivKembaliDariSimpanDataWarung" />
 
         <TextView
@@ -39,7 +40,7 @@ android:background="@color/color_background"
             android:textStyle="bold"
             android:text="Tambah Warung"
             android:textSize="20sp"
-            android:textColor="@color/text_color"/>
+            android:textColor="@color/color5"/>
     </RelativeLayout>
     <androidx.core.widget.NestedScrollView
         android:layout_below="@+id/headerLayout"
@@ -68,11 +69,10 @@ android:background="@color/color_background"
                 app:boxCornerRadiusTopStart="5dp"
                 app:startIconDrawable="@drawable/store_bxs_alt"
                 app:hintAnimationEnabled="true"
-                app:hintTextColor="@color/text_color"
-                app:endIconTint="@color/text_color"
-                app:startIconTint="@color/text_color"
-                android:textColorHint="@color/text_color"
-                app:boxStrokeColor="@color/text_color"
+                app:hintTextColor="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -103,11 +103,10 @@ android:background="@color/color_background"
                 app:boxCornerRadiusTopStart="5dp"
                 app:startIconDrawable="@drawable/businessman"
                 app:hintAnimationEnabled="true"
-                app:hintTextColor="@color/text_color"
-                app:endIconTint="@color/text_color"
-                app:startIconTint="@color/text_color"
-                android:textColorHint="@color/text_color"
-                app:boxStrokeColor="@color/text_color">
+                app:hintTextColor="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tietOwnerToko"
@@ -119,10 +118,10 @@ android:background="@color/color_background"
                     android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true"
-
                     android:textColor="@color/temaapp"
                     android:textColorHint="@color/black"
                     android:textSize="18sp" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -136,11 +135,10 @@ android:background="@color/color_background"
                 app:boxCornerRadiusTopStart="5dp"
                 app:hintAnimationEnabled="true"
                 app:startIconDrawable="@drawable/phone"
-                app:hintTextColor="@color/text_color"
-                app:endIconTint="@color/text_color"
-                app:startIconTint="@color/text_color"
-                android:textColorHint="@color/text_color"
-                app:boxStrokeColor="@color/text_color">
+                app:hintTextColor="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tietKontakToko"
@@ -171,11 +169,10 @@ android:background="@color/color_background"
                 app:boxCornerRadiusTopStart="5dp"
                 app:hintAnimationEnabled="true"
                 app:startIconDrawable="@drawable/location"
-                app:hintTextColor="@color/text_color"
-                app:endIconTint="@color/text_color"
-                app:startIconTint="@color/text_color"
-                android:textColorHint="@color/text_color"
-                app:boxStrokeColor="@color/text_color">
+                app:hintTextColor="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tietAlamatToko"
@@ -188,9 +185,9 @@ android:background="@color/color_background"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textColor="@color/temaapp"
-
                     android:textColorHint="@color/black"
                     android:textSize="18sp" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -204,11 +201,11 @@ android:background="@color/color_background"
                 app:boxCornerRadiusTopStart="5dp"
                 app:startIconDrawable="@drawable/location"
                 app:hintAnimationEnabled="true"
-                app:hintTextColor="@color/text_color"
-                app:endIconTint="@color/text_color"
-                app:startIconTint="@color/text_color"
-                android:textColorHint="@color/text_color"
-                app:boxStrokeColor="@color/text_color">
+                app:hintTextColor="@color/color5"
+                app:endIconTint="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tietKelurahanToko"
@@ -238,11 +235,11 @@ android:background="@color/color_background"
                 app:hintAnimationEnabled="true"
                 app:startIconDrawable="@drawable/location"
 
-                app:hintTextColor="@color/text_color"
-                app:endIconTint="@color/text_color"
-                app:startIconTint="@color/text_color"
-                android:textColorHint="@color/text_color"
-                app:boxStrokeColor="@color/text_color"
+                app:hintTextColor="@color/color5"
+                app:endIconTint="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -272,11 +269,11 @@ android:background="@color/color_background"
                 app:hintAnimationEnabled="true"
                 app:startIconDrawable="@drawable/location"
 
-                app:hintTextColor="@color/text_color"
-                app:endIconTint="@color/text_color"
-                app:startIconTint="@color/text_color"
-                android:textColorHint="@color/text_color"
-                app:boxStrokeColor="@color/text_color">
+                app:hintTextColor="@color/color5"
+                app:endIconTint="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tietKotaToko"
@@ -306,11 +303,11 @@ android:background="@color/color_background"
                 app:hintAnimationEnabled="true"
                 app:startIconDrawable="@drawable/location"
 
-                app:hintTextColor="@color/text_color"
-                app:endIconTint="@color/text_color"
-                app:startIconTint="@color/text_color"
-                android:textColorHint="@color/text_color"
-                app:boxStrokeColor="@color/text_color">
+                app:hintTextColor="@color/color5"
+                app:endIconTint="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tietProvinsiToko"
@@ -339,11 +336,11 @@ android:background="@color/color_background"
                 app:boxCornerRadiusTopStart="5dp"
                 app:hintAnimationEnabled="true"
                 app:startIconDrawable="@drawable/post_stamp"
-                app:hintTextColor="@color/text_color"
-                app:endIconTint="@color/text_color"
-                app:startIconTint="@color/text_color"
-                android:textColorHint="@color/text_color"
-                app:boxStrokeColor="@color/text_color">
+                app:hintTextColor="@color/color5"
+                app:endIconTint="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tietKodePosToko"
@@ -355,7 +352,6 @@ android:background="@color/color_background"
                     android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true"
-
                     android:textColor="@color/temaapp"
                     android:textColorHint="@color/black"
                     android:textSize="18sp" />

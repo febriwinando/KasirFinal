@@ -30,6 +30,7 @@ tools:context=".dashboard.DaftarMejaWaitersActivity">
             android:src="@drawable/ic_left"
             android:id="@+id/kembaliDariDaftarMeja"
             app:tint="@color/color4"/>
+
         <TextView
             android:layout_toEndOf="@id/kembaliDariDaftarMeja"
             android:layout_centerVertical="true"

@@ -53,4 +53,18 @@ public interface api_transakasi_data {
             @Field("user_id") int userId,
             @Field("token") String token
     );
+
+    @FormUrlEncoded
+    @POST("data-toko")
+    Call<ApiResponse> simpantoko(
+            @Field("nama") String nama,
+            @Field("owner") String owner,
+            @Field("owner") String alamat,
+            @Field("owner") String kontak,
+            @Field("owner") String kelurahan,
+            @Field("owner") String kecamatan,
+            @Field("owner") String kota,
+            @Field("owner") String provinsi,
+            @Field("owner") String kodepos
+    );
 }

@@ -57,6 +57,31 @@ android:background="@color/color_background"
             android:padding="5dp"
             android:background="@drawable/backgoundovalputih">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/iconWarung"
+                    android:layout_width="250dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="250dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/store_bxs_alt"
+                    android:outlineAmbientShadowColor="@color/color5"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearance="@style/ImageStyle2" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/ivFotoWarung"
+                    android:layout_width="250dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="250dp"
+                    android:layout_centerHorizontal="true"
+                    android:outlineAmbientShadowColor="@color/color5"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearance="@style/ImageStyle2" />
+            </RelativeLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_marginBottom="10dp"

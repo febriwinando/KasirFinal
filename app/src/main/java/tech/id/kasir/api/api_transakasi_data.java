@@ -59,12 +59,15 @@ public interface api_transakasi_data {
     Call<ApiResponse> simpantoko(
             @Field("nama") String nama,
             @Field("owner") String owner,
-            @Field("owner") String alamat,
-            @Field("owner") String kontak,
-            @Field("owner") String kelurahan,
-            @Field("owner") String kecamatan,
-            @Field("owner") String kota,
-            @Field("owner") String provinsi,
-            @Field("owner") String kodepos
+            @Field("alamat") String alamat,
+            @Field("kontak") String kontak,
+            @Field("kelurahan") String kelurahan,
+            @Field("kecamatan") String kecamatan,
+            @Field("kota") String kota,
+            @Field("provinsi") String provinsi,
+            @Field("kodepos") String kodepos,
+            @Field("logo") String logo,
+            @Field("ekstensi") String ekstensi
+
     );
 }

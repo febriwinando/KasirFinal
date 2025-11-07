@@ -55,8 +55,8 @@ public class TambahWarungActivity extends AppCompatActivity {
     ImageButton ibSaveInfoWarung;
     AmbilGambar ambilGambar = new AmbilGambar(TambahWarungActivity.this);
     Bitmap rotationBitmapSurat;
-    String fotoTaging = null, lampiran = null;
-    String ekslampiran;
+    static String lampiran = "gambar";
+    static String ekslampiran = "ekstensi";
     ActivityResultLauncher<Intent> resultLauncher;
 
     ShapeableImageView ivFotoWarung, iconWarung;
@@ -122,7 +122,7 @@ public class TambahWarungActivity extends AppCompatActivity {
         String kodepos = Objects.requireNonNull(tietKodePosToko.getText()).toString().trim();
 
 
-        Call<ApiResponse> call = RetrofitClient.getInstance().getApi().simpantoko(namaToko, owner, kontak, alamat, kelurahan, kecamatan, kota, provinsi, kodepos);
+        Call<ApiResponse> call = RetrofitClient.getInstance().getApi().simpantoko(namaToko, owner, kontak, alamat, kelurahan, kecamatan, kota, provinsi, kodepos, lampiran, ekslampiran);
 
         call.enqueue(new Callback<>() {
             @Override
@@ -140,7 +140,7 @@ public class TambahWarungActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<ApiResponse> call, Throwable t) {
-                Log.e("FCM_TOKEN", "Error: " + t.getMessage());
+                Log.e("Toko", "Error: " + t.getMessage());
 
             }
         });

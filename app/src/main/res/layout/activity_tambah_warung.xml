@@ -36,7 +36,6 @@ android:background="@color/color_background"
             android:layout_toEndOf="@+id/ivKembaliDariSimpanDataWarung"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:textStyle="bold"
             android:text="Tambah Warung"
             android:textSize="20sp"
@@ -382,6 +381,37 @@ android:background="@color/color_background"
                     android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginBottom="10dp"
+                style="@style/LoginTextInputLayoutStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxCornerRadiusBottomEnd="5dp"
+                app:boxCornerRadiusBottomStart="5dp"
+                app:boxCornerRadiusTopEnd="5dp"
+                app:boxCornerRadiusTopStart="5dp"
+                app:hintAnimationEnabled="true"
+                app:startIconDrawable="@drawable/post_stamp"
+                app:hintTextColor="@color/color5"
+                app:endIconTint="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tietJumlahMeja"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="Jumlah Meja"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/temaapp"
+                    android:textColorHint="@color/black"
+                    android:textSize="18sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.core.widget.NestedScrollView>

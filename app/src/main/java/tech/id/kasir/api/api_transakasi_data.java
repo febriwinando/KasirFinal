@@ -69,7 +69,9 @@ public interface api_transakasi_data {
             @Field("logo") String logo,
             @Field("ekstensi") String ekstensi,
             @Field("email") String email,
-            @Field("meja") String meja
+            @Field("meja") String meja,
+            @Field("jam_buka") String jam_buka,
+            @Field("jam_tutup") String jam_tutup
 
 
     );

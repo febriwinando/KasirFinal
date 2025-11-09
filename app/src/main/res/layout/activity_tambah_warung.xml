@@ -48,12 +48,13 @@ android:background="@color/color_background"
         android:layout_height="match_parent"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
         >
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="5dp"
+            android:padding="10dp"
             android:background="@drawable/backgoundovalputih">
 
             <RelativeLayout
@@ -243,6 +244,108 @@ android:background="@color/color_background"
 
             </com.google.android.material.textfield.TextInputLayout>
 
+
+            <!-- Provinsi -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilProvinsi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Pilih Provinsi"
+                app:endIconMode="dropdown_menu"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                app:startIconDrawable="@drawable/location"
+                app:hintTextColor="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoProvinsi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:focusable="true"
+                    android:textSize="18sp"
+                    android:textColor="@color/temaapp"
+                    android:textColorHint="@color/black"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Kabupaten -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilKabupaten"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Pilih Kabupaten / Kota"
+                android:layout_marginTop="12dp"
+                app:endIconMode="dropdown_menu"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                app:startIconDrawable="@drawable/location"
+                app:hintTextColor="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoKabupaten"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textSize="18sp"
+                    android:textColor="@color/temaapp"
+                    android:textColorHint="@color/black"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Kecamatan -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilKecamatan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Pilih Kecamatan"
+                android:layout_marginTop="12dp"
+                app:endIconMode="dropdown_menu"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                app:startIconDrawable="@drawable/location"
+                app:hintTextColor="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoKecamatan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textSize="18sp"
+                    android:textColor="@color/temaapp"
+                    android:textColorHint="@color/black"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Kelurahan -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilKelurahan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Pilih Kelurahan / Desa"
+                android:layout_marginTop="12dp"
+                app:endIconMode="dropdown_menu"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                app:startIconDrawable="@drawable/location"
+                app:hintTextColor="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoKelurahan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textSize="18sp"
+                    android:textColor="@color/temaapp"
+                    android:textColorHint="@color/black"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_marginBottom="10dp"
                 style="@style/LoginTextInputLayoutStyle"
@@ -267,7 +370,7 @@ android:background="@color/color_background"
                     android:layout_gravity="center"
                     android:hint="Kode Pos"
                     android:imeOptions="actionNext"
-                    android:inputType="text"
+                    android:inputType="number"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textColor="@color/temaapp"
@@ -306,105 +409,57 @@ android:background="@color/color_background"
                     android:textColorHint="@color/black"
                     android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
-            <LinearLayout
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilJamBuka"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_vertical">
+                app:startIconDrawable="@drawable/ic_clock_open"
+                app:endIconMode="none"
+                app:hintTextColor="@color/color5"
+                app:endIconTint="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5">
 
-                <!-- Provinsi -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilProvinsi"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tietJamBuka"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Pilih Provinsi"
-                    app:endIconMode="dropdown_menu"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    app:startIconDrawable="@drawable/location"
-                    app:hintTextColor="@color/color5"
-                    app:startIconTint="@color/color5"
-                    android:textColorHint="@color/color5"
-                    app:boxStrokeColor="@color/color5">
+                    android:focusable="false"
+                    android:cursorVisible="false"
+                    android:inputType="none"
+                    android:textSize="18sp"
+                    android:hint="Pilih jam buka"
+                    android:textColor="@color/temaapp"
+                    android:textColorHint="@color/black"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <AutoCompleteTextView
-                        android:id="@+id/autoProvinsi"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="none"
-                        android:focusable="true"
-                        android:textSize="16sp" />
-                </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilJamTutup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:startIconDrawable="@drawable/ic_clock_close"
+                app:endIconMode="none"
+                android:layout_marginTop="12dp"
+                app:hintTextColor="@color/color5"
+                app:endIconTint="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5">
 
-                <!-- Kabupaten -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilKabupaten"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tietJamTutup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Pilih Kabupaten / Kota"
-                    android:layout_marginTop="12dp"
-                    app:endIconMode="dropdown_menu"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    app:startIconDrawable="@drawable/location"
-                    app:hintTextColor="@color/color5"
-                    app:startIconTint="@color/color5"
-                    android:textColorHint="@color/color5"
-                    app:boxStrokeColor="@color/color5">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/autoKabupaten"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="none"
-                        android:textSize="16sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Kecamatan -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilKecamatan"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Pilih Kecamatan"
-                    android:layout_marginTop="12dp"
-                    app:endIconMode="dropdown_menu"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    app:startIconDrawable="@drawable/location"
-                    app:hintTextColor="@color/color5"
-                    app:startIconTint="@color/color5"
-                    android:textColorHint="@color/color5"
-                    app:boxStrokeColor="@color/color5">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/autoKecamatan"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="none"
-                        android:textSize="16sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Kelurahan -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilKelurahan"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Pilih Kelurahan / Desa"
-                    android:layout_marginTop="12dp"
-                    app:endIconMode="dropdown_menu"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    app:startIconDrawable="@drawable/location"
-                    app:hintTextColor="@color/color5"
-                    app:startIconTint="@color/color5"
-                    android:textColorHint="@color/color5"
-                    app:boxStrokeColor="@color/color5">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/autoKelurahan"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="none"
-                        android:textSize="16sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
+                    android:focusable="false"
+                    android:cursorVisible="false"
+                    android:inputType="none"
+                    android:textSize="18sp"
+                    android:hint="Pilih jam tutup"
+                    android:textColor="@color/temaapp"
+                    android:textColorHint="@color/black"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.core.widget.NestedScrollView>

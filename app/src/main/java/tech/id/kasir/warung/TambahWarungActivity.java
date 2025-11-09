@@ -3,6 +3,7 @@ package tech.id.kasir.warung;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -43,6 +45,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -56,13 +59,13 @@ import tech.id.kasir.response_api.ApiResponse;
 
 public class TambahWarungActivity extends AppCompatActivity {
 
-    static TextInputEditText tietJumlahMeja, tietEmail, tietNamaToko, tietOwnerToko, tietKontakToko, tietAlamatToko, tietKodePosToko;
+    static TextInputEditText tietJamBuka, tietJamTutup, tietJumlahMeja, tietEmail, tietNamaToko, tietOwnerToko, tietKontakToko, tietAlamatToko, tietKodePosToko;
     ImageButton ibSaveInfoWarung;
     AmbilGambar ambilGambar = new AmbilGambar(TambahWarungActivity.this);
     Bitmap rotationBitmapSurat;
     static String lampiran = "gambar";
     static String ekslampiran = "ekstensi";
-
+    static String kecamatanId, kabupatenId, provinsiId, kelurahanId;
     AutoCompleteTextView autoProvinsi, autoKabupaten, autoKecamatan, autoKelurahan;
     private String selectedProvId = null;
     private String selectedKabId = null;
@@ -93,6 +96,12 @@ public class TambahWarungActivity extends AppCompatActivity {
         iconWarung = findViewById(R.id.iconWarung);
         tietEmail = findViewById(R.id.tietEmail);
         tietJumlahMeja = findViewById(R.id.tietJumlahMeja);
+        autoProvinsi = findViewById(R.id.autoProvinsi);
+        autoKabupaten = findViewById(R.id.autoKabupaten);
+        autoKecamatan = findViewById(R.id.autoKecamatan);
+        autoKelurahan = findViewById(R.id.autoKelurahan);
+        tietJamBuka = findViewById(R.id.tietJamBuka);
+        tietJamTutup = findViewById(R.id.tietJamTutup);
 
         iconWarung.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,14 +122,30 @@ public class TambahWarungActivity extends AppCompatActivity {
             }
         });
 
-        autoProvinsi = findViewById(R.id.autoProvinsi);
-        autoKabupaten = findViewById(R.id.autoKabupaten);
-        autoKecamatan = findViewById(R.id.autoKecamatan);
-        autoKelurahan = findViewById(R.id.autoKelurahan);
 
+
+        tietJamBuka.setOnClickListener(v -> showTimePickerDialog(tietJamBuka));
+        tietJamTutup.setOnClickListener(v -> showTimePickerDialog(tietJamTutup));
         loadProvinsi();
     }
-    static String kecamatanId, kabupatenId, provinsiId, kelurahanId;
+
+    private void showTimePickerDialog(TextView target) {
+        final Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                this,
+                (view, hourOfDay, minuteOfHour) -> {
+                    String formattedTime = String.format("%02d:%02d", hourOfDay, minuteOfHour);
+                    target.setText(formattedTime);
+                },
+                hour, minute, true // true = 24-hour format
+        );
+
+        timePickerDialog.show();
+    }
+
     private void loadProvinsi() {
         Cursor cursor = dbHelper.getAllProvinsi();
         ArrayList<String> provinsiList = new ArrayList<>();
@@ -205,8 +230,10 @@ public class TambahWarungActivity extends AppCompatActivity {
         String kodepos = Objects.requireNonNull(tietKodePosToko.getText()).toString().trim();
         String email = Objects.requireNonNull(tietEmail.getText()).toString().trim();
         String jumlahMeja = Objects.requireNonNull(tietJumlahMeja.getText()).toString().trim();
+        String jamBuka = Objects.requireNonNull(tietJamBuka.getText()).toString().trim();
+        String jamTutup = Objects.requireNonNull(tietJamTutup.getText()).toString().trim();
 
-        Call<ApiResponse> call = RetrofitClient.getInstance().getApi().simpantoko(namaToko, owner, kontak, alamat, kelurahanId, kecamatanId, kabupatenId, provinsiId, kodepos, lampiran, ekslampiran, jumlahMeja, email);
+        Call<ApiResponse> call = RetrofitClient.getInstance().getApi().simpantoko(namaToko, owner, kontak, alamat, kelurahanId, kecamatanId, kabupatenId, provinsiId, kodepos, lampiran, ekslampiran, jumlahMeja, email, jamBuka, jamTutup);
 
         call.enqueue(new Callback<>() {
             @Override

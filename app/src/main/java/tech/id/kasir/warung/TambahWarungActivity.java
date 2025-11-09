@@ -16,7 +16,10 @@ import android.provider.OpenableColumns;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
@@ -39,6 +42,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -47,18 +51,25 @@ import retrofit2.Response;
 import tech.id.kasir.AmbilGambar;
 import tech.id.kasir.R;
 import tech.id.kasir.api.RetrofitClient;
+import tech.id.kasir.database.DBHelper;
 import tech.id.kasir.response_api.ApiResponse;
 
 public class TambahWarungActivity extends AppCompatActivity {
 
-    static TextInputEditText tietNamaToko, tietOwnerToko, tietKontakToko, tietAlamatToko, tietKelurahanToko, tietKecamatanToko, tietKotaToko, tietProvinsiToko, tietKodePosToko;
+    static TextInputEditText tietJumlahMeja, tietEmail, tietNamaToko, tietOwnerToko, tietKontakToko, tietAlamatToko, tietKodePosToko;
     ImageButton ibSaveInfoWarung;
     AmbilGambar ambilGambar = new AmbilGambar(TambahWarungActivity.this);
     Bitmap rotationBitmapSurat;
     static String lampiran = "gambar";
     static String ekslampiran = "ekstensi";
-    ActivityResultLauncher<Intent> resultLauncher;
 
+    AutoCompleteTextView autoProvinsi, autoKabupaten, autoKecamatan, autoKelurahan;
+    private String selectedProvId = null;
+    private String selectedKabId = null;
+    private String selectedKecId = null;
+    private String selectedKelId = null;
+    String provId;
+    DBHelper dbHelper = new DBHelper(TambahWarungActivity.this);
     ShapeableImageView ivFotoWarung, iconWarung;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,14 +87,12 @@ public class TambahWarungActivity extends AppCompatActivity {
         tietOwnerToko = findViewById(R.id.tietOwnerToko);
         tietKontakToko = findViewById(R.id.tietKontakToko);
         tietAlamatToko = findViewById(R.id.tietAlamatToko);
-        tietKelurahanToko = findViewById(R.id.tietKelurahanToko);
-        tietKecamatanToko = findViewById(R.id.tietKecamatanToko);
-        tietKotaToko = findViewById(R.id.tietKotaToko);
-        tietProvinsiToko = findViewById(R.id.tietProvinsiToko);
         tietKodePosToko = findViewById(R.id.tietKodePosToko);
         ibSaveInfoWarung = findViewById(R.id.ibSaveInfoWarung);
         ivFotoWarung = findViewById(R.id.ivFotoWarung);
         iconWarung = findViewById(R.id.iconWarung);
+        tietEmail = findViewById(R.id.tietEmail);
+        tietJumlahMeja = findViewById(R.id.tietJumlahMeja);
 
         iconWarung.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,10 +113,88 @@ public class TambahWarungActivity extends AppCompatActivity {
             }
         });
 
+        autoProvinsi = findViewById(R.id.autoProvinsi);
+        autoKabupaten = findViewById(R.id.autoKabupaten);
+        autoKecamatan = findViewById(R.id.autoKecamatan);
+        autoKelurahan = findViewById(R.id.autoKelurahan);
+
+        loadProvinsi();
+    }
+    static String kecamatanId, kabupatenId, provinsiId, kelurahanId;
+    private void loadProvinsi() {
+        Cursor cursor = dbHelper.getAllProvinsi();
+        ArrayList<String> provinsiList = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            provinsiList.add(cursor.getString(cursor.getColumnIndexOrThrow("nama")));
+        }
+        cursor.close();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, provinsiList);
+        autoProvinsi.setAdapter(adapter);
+
+        autoProvinsi.setOnItemClickListener((parent, view, position, id) -> {
+            String provinsiNama = parent.getItemAtPosition(position).toString();
+            provinsiId = dbHelper.getProvinsiIdByName(provinsiNama);
+            loadKabupaten(provinsiId);
+        });
+    }
+
+    private void loadKabupaten(String provinsiId) {
+        Cursor cursor = dbHelper.getKabupatenByProvinsiId(provinsiId);
+        ArrayList<String> kabList = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            kabList.add(cursor.getString(cursor.getColumnIndexOrThrow("nama")));
+        }
+        cursor.close();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, kabList);
+        autoKabupaten.setAdapter(adapter);
+
+        autoKabupaten.setOnItemClickListener((parent, view, position, id) -> {
+            String kabupatenNama = parent.getItemAtPosition(position).toString();
+            kabupatenId = dbHelper.getKabupatenIdByName(kabupatenNama, provinsiId);
+            loadKecamatan(kabupatenId);
+        });
+    }
+
+    private void loadKecamatan(String kabupatenId) {
+        Cursor cursor = dbHelper.getKecamatanByKabupatenId(kabupatenId);
+        ArrayList<String> kecList = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            kecList.add(cursor.getString(cursor.getColumnIndexOrThrow("nama")));
+        }
+        cursor.close();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, kecList);
+        autoKecamatan.setAdapter(adapter);
+
+        autoKecamatan.setOnItemClickListener((parent, view, position, id) -> {
+            String kecamatanNama = parent.getItemAtPosition(position).toString();
+            kecamatanId = dbHelper.getKecamatanIdByName(kecamatanNama, kabupatenId);
+            loadKelurahan(kecamatanId);
+
+        });
+    }
+
+    private void loadKelurahan(String kecamatanId) {
+        Cursor cursor = dbHelper.getKelurahanByKecamatanId(kecamatanId);
+        ArrayList<String> kelList = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            kelList.add(cursor.getString(cursor.getColumnIndexOrThrow("nama")));
+        }
+        cursor.close();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, kelList);
+        autoKelurahan.setAdapter(adapter);
+
+        autoKelurahan.setOnItemClickListener((parent, view, position, id) -> {
+            String kelurahanNama = parent.getItemAtPosition(position).toString();
+            kelurahanId = dbHelper.getKelurahanIdByName(kelurahanNama, kecamatanId);
+            Toast.makeText(this, kelurahanNama+" "+kelurahanId, Toast.LENGTH_SHORT).show();
+        });
 
 
     }
-
 
     public static void sendDataWarungToServer() {
 
@@ -115,14 +202,11 @@ public class TambahWarungActivity extends AppCompatActivity {
         String owner = Objects.requireNonNull(tietOwnerToko.getText()).toString().trim();
         String kontak = Objects.requireNonNull(tietKontakToko.getText()).toString().trim();
         String alamat = Objects.requireNonNull(tietAlamatToko.getText()).toString().trim();
-        String kelurahan = Objects.requireNonNull(tietKelurahanToko.getText()).toString().trim();
-        String kecamatan = Objects.requireNonNull(tietKecamatanToko.getText()).toString().trim();
-        String kota = Objects.requireNonNull(tietKotaToko.getText()).toString().trim();
-        String provinsi = Objects.requireNonNull(tietProvinsiToko.getText()).toString().trim();
         String kodepos = Objects.requireNonNull(tietKodePosToko.getText()).toString().trim();
+        String email = Objects.requireNonNull(tietEmail.getText()).toString().trim();
+        String jumlahMeja = Objects.requireNonNull(tietJumlahMeja.getText()).toString().trim();
 
-
-        Call<ApiResponse> call = RetrofitClient.getInstance().getApi().simpantoko(namaToko, owner, kontak, alamat, kelurahan, kecamatan, kota, provinsi, kodepos, lampiran, ekslampiran);
+        Call<ApiResponse> call = RetrofitClient.getInstance().getApi().simpantoko(namaToko, owner, kontak, alamat, kelurahanId, kecamatanId, kabupatenId, provinsiId, kodepos, lampiran, ekslampiran, jumlahMeja, email);
 
         call.enqueue(new Callback<>() {
             @Override

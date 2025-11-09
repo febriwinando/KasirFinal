@@ -7,6 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.InputStream;
 import java.util.List;
 
 import tech.id.kasir.response_api.Menu;
@@ -31,6 +35,19 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        String CREATE_PROVINSI = "CREATE TABLE provinsi (id TEXT PRIMARY KEY, nama TEXT)";
+        db.execSQL(CREATE_PROVINSI);
+
+        String CREATE_KABUPATEN = "CREATE TABLE kabupaten (id TEXT PRIMARY KEY, provinsi_id TEXT, nama TEXT)";
+        db.execSQL(CREATE_KABUPATEN);
+
+        String CREATE_KECAMATAN = "CREATE TABLE kecamatan (id TEXT PRIMARY KEY, kabupaten_id TEXT, nama TEXT)";
+        db.execSQL(CREATE_KECAMATAN);
+
+        String CREATE_KELURAHAN = "CREATE TABLE kelurahan (id TEXT PRIMARY KEY, kecamatan_id TEXT, nama TEXT)";
+        db.execSQL(CREATE_KELURAHAN);
+
         String CREATE_TABLE = "CREATE TABLE " + TABLE_PENGGUNA + " (" +
                 "id INTEGER PRIMARY KEY, " +
                 "restoran_id INTEGER, " +
@@ -124,9 +141,14 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RESTORAN);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MENU);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ORDER_ITEM_DETAILS);
+        db.execSQL("DROP TABLE IF EXISTS provinsi");
+        db.execSQL("DROP TABLE IF EXISTS kabupaten");
+        db.execSQL("DROP TABLE IF EXISTS kecamatan");
+        db.execSQL("DROP TABLE IF EXISTS keluarahn");
 
         onCreate(db);
     }
+
     public Cursor getOrdersByStatusAndMeja(String status, String meja) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM orders WHERE status = ? AND meja = ? LIMIT 1", new String[]{status, meja});
@@ -523,7 +545,147 @@ public class DBHelper extends SQLiteOpenHelper {
         return id;
     }
 
+    public Cursor getAllProvinsi() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM provinsi ORDER BY nama ASC", null);
+    }
 
+    public String getProvinsiIdByName(String nama) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT id FROM provinsi WHERE nama = ?", new String[]{nama});
+        String id = "";
+        if (cursor.moveToFirst()) id = cursor.getString(0);
+        cursor.close();
+        return id;
+    }
+
+    public Cursor getKabupatenByProvinsiId(String provinsiId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM kabupaten WHERE provinsi_id = ? ORDER BY nama ASC", new String[]{provinsiId});
+    }
+
+    public String getKabupatenIdByName(String nama, String provinsi_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT id FROM kabupaten WHERE nama = ? and provinsi_id = ? ", new String[]{nama, provinsi_id});
+        String id = "";
+        if (cursor.moveToFirst()) id = cursor.getString(0);
+        cursor.close();
+        return id;
+    }
+
+    public Cursor getKecamatanByKabupatenId(String kabupatenId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM kecamatan WHERE kabupaten_id = ? ORDER BY nama ASC", new String[]{kabupatenId});
+    }
+
+    public String getKecamatanIdByName(String nama, String kabupatenId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT id FROM kecamatan WHERE nama = ? and kabupaten_id = ?", new String[]{nama, kabupatenId});
+        String id = "";
+        if (cursor.moveToFirst()) id = cursor.getString(0);
+        cursor.close();
+        return id;
+    }
+
+//    public String getKelurahanIdByName(String nama, String kecamatanId) {
+//        if (nama == null) return null;
+//        nama = nama.trim();
+//
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        Cursor cursor = null;
+//        try {
+//            if (kecamatanId == null || kecamatanId.trim().isEmpty()) {
+//                // Jika kecamatanId tidak diberikan, hanya pakai nama (opsional)
+//                cursor = db.rawQuery(
+//                        "SELECT id FROM kelurahan WHERE nama = ? COLLATE NOCASE LIMIT 1",
+//                        new String[]{ nama }
+//                );
+//            } else {
+//                cursor = db.rawQuery(
+//                        "SELECT id FROM kelurahan WHERE nama = ? AND kecamatan_id = ? LIMIT 1",
+//                        new String[]{ nama, kecamatanId.trim() }
+//                );
+//            }
+//
+//            if (cursor != null && cursor.moveToFirst()) {
+//                int idx = cursor.getColumnIndexOrThrow("id");
+//                return cursor.getString(idx);
+//            }
+//            return null;
+//        } finally {
+//            if (cursor != null) cursor.close();
+//        }
+//    }
+
+        public String getKelurahanIdByName(String nama, String kecamatanId) {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT id FROM kelurahan WHERE nama = ? and kecamatan_id =? ", new String[]{nama, kecamatanId});
+            String id = "";
+            if (cursor.moveToFirst()) id = cursor.getString(0);
+            cursor.close();
+            return id;
+        }
+    public Cursor getKelurahanByKecamatanId(String kecamatanId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM kelurahan WHERE kecamatan_id = ? ORDER BY nama ASC", new String[]{kecamatanId});
+    }
+
+    public boolean isTableEmpty(String tableName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM "+tableName, null);
+        boolean empty = true;
+        if (cursor.moveToFirst()) {
+            int count = cursor.getInt(0);
+            empty = (count == 0);
+        }
+        cursor.close();
+        return empty;
+    }
+
+    public void importFromJSON(Context context, String fileName, String tableName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            InputStream is = context.getAssets().open(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            String json = new String(buffer, "UTF-8");
+
+            JSONArray jsonArray = new JSONArray(json);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+
+                ContentValues values = new ContentValues();
+                if (tableName.equals("provinsi")) {
+                    values.put("id", obj.getString("id"));
+                    values.put("nama", obj.getString("nama"));
+                } else if (tableName.equals("kabupaten")) {
+                    values.put("id", obj.getString("id"));
+                    values.put("provinsi_id", obj.getString("provinsi_id"));
+                    values.put("nama", obj.getString("nama"));
+                } else if (tableName.equals("kecamatan")) {
+                    values.put("id", obj.getString("id"));
+                    values.put("kabupaten_id", obj.getString("kabupaten_id"));
+                    values.put("nama", obj.getString("nama"));
+                } else if (tableName.equals("kelurahan")) {
+                    values.put("id", obj.getString("id"));
+                    values.put("kecamatan_id", obj.getString("kecamatan_id"));
+                    values.put("nama", obj.getString("nama"));
+                }
+
+                db.insertWithOnConflict(tableName, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+            }
+
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
+    }
 
 
 }

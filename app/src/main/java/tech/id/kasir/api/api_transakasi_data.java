@@ -57,7 +57,7 @@ public interface api_transakasi_data {
     @FormUrlEncoded
     @POST("data-toko")
     Call<ApiResponse> simpantoko(
-            @Field("nama") String nama,
+            @Field("restoran") String restoran,
             @Field("owner") String owner,
             @Field("alamat") String alamat,
             @Field("kontak") String kontak,
@@ -67,7 +67,10 @@ public interface api_transakasi_data {
             @Field("provinsi") String provinsi,
             @Field("kodepos") String kodepos,
             @Field("logo") String logo,
-            @Field("ekstensi") String ekstensi
+            @Field("ekstensi") String ekstensi,
+            @Field("email") String email,
+            @Field("meja") String meja
+
 
     );
 }

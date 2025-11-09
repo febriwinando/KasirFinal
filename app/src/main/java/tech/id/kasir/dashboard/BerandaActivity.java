@@ -32,6 +32,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import tech.id.kasir.R;
 import tech.id.kasir.api.RetrofitClient;
+import tech.id.kasir.database.DBHelper;
 import tech.id.kasir.firebase.MyFirebaseMessagingService;
 import tech.id.kasir.network.NetworkUtil;
 import tech.id.kasir.pengaturan.PengaturanPerangkatActivity;
@@ -99,6 +100,23 @@ public class BerandaActivity extends AppCompatActivity {
                     sendTokenToServer(1, token);
                 });
 
+        DBHelper dbHelper = new DBHelper(this);
+
+        if (dbHelper.isTableEmpty("provinsi")) {
+            dbHelper.importFromJSON(this, "provinsis.json", "provinsi");
+        }
+
+        if (dbHelper.isTableEmpty("kabupaten")) {
+            dbHelper.importFromJSON(this, "kabupatens.json", "kabupaten");
+        }
+
+        if (dbHelper.isTableEmpty("kecamatan")) {
+            dbHelper.importFromJSON(this, "kecamatans.json", "kecamatan");
+        }
+
+        if (dbHelper.isTableEmpty("kelurahan")) {
+            dbHelper.importFromJSON(this, "kelurahans.json", "kelurahan");
+        }
     }
 
     @Override

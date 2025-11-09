@@ -180,7 +180,36 @@ android:background="@color/color_background"
                     android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginBottom="10dp"
+                style="@style/LoginTextInputLayoutStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxCornerRadiusBottomEnd="5dp"
+                app:boxCornerRadiusBottomStart="5dp"
+                app:boxCornerRadiusTopEnd="5dp"
+                app:boxCornerRadiusTopStart="5dp"
+                app:hintAnimationEnabled="true"
+                app:startIconDrawable="@drawable/ic_mail"
+                app:hintTextColor="@color/color5"
+                app:startIconTint="@color/color5"
+                android:textColorHint="@color/color5"
+                app:boxStrokeColor="@color/color5">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tietEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="Email Toko"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/temaapp"
+                    android:textColorHint="@color/black"
+                    android:textSize="18sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_marginBottom="10dp"
@@ -212,141 +241,6 @@ android:background="@color/color_background"
                     android:textColorHint="@color/black"
                     android:textSize="18sp" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_marginBottom="10dp"
-                style="@style/LoginTextInputLayoutStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:startIconDrawable="@drawable/location"
-                app:hintAnimationEnabled="true"
-                app:hintTextColor="@color/color5"
-                app:endIconTint="@color/color5"
-                app:startIconTint="@color/color5"
-                android:textColorHint="@color/color5"
-                app:boxStrokeColor="@color/color5">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tietKelurahanToko"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:hint="Kelurahan"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textColor="@color/temaapp"
-
-                    android:textColorHint="@color/black"
-                    android:textSize="18sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_marginBottom="10dp"
-                style="@style/LoginTextInputLayoutStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:hintAnimationEnabled="true"
-                app:startIconDrawable="@drawable/location"
-
-                app:hintTextColor="@color/color5"
-                app:endIconTint="@color/color5"
-                app:startIconTint="@color/color5"
-                android:textColorHint="@color/color5"
-                app:boxStrokeColor="@color/color5"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tietKecamatanToko"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:hint="Kecamatan"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textColor="@color/temaapp"
-                    android:textColorHint="@color/black"
-                    android:textSize="18sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_marginBottom="10dp"
-                style="@style/LoginTextInputLayoutStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:hintAnimationEnabled="true"
-                app:startIconDrawable="@drawable/location"
-
-                app:hintTextColor="@color/color5"
-                app:endIconTint="@color/color5"
-                app:startIconTint="@color/color5"
-                android:textColorHint="@color/color5"
-                app:boxStrokeColor="@color/color5">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tietKotaToko"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:hint="Kabupaten/Kota"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:maxLines="1"
-
-                    android:singleLine="true"
-                    android:textColor="@color/temaapp"
-                    android:textColorHint="@color/black"
-                    android:textSize="18sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_marginBottom="10dp"
-                style="@style/LoginTextInputLayoutStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:hintAnimationEnabled="true"
-                app:startIconDrawable="@drawable/location"
-
-                app:hintTextColor="@color/color5"
-                app:endIconTint="@color/color5"
-                app:startIconTint="@color/color5"
-                android:textColorHint="@color/color5"
-                app:boxStrokeColor="@color/color5">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tietProvinsiToko"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:hint="Provinsi"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true"
-
-                    android:textColor="@color/temaapp"
-                    android:textColorHint="@color/black"
-                    android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -391,7 +285,7 @@ android:background="@color/color_background"
                 app:boxCornerRadiusTopEnd="5dp"
                 app:boxCornerRadiusTopStart="5dp"
                 app:hintAnimationEnabled="true"
-                app:startIconDrawable="@drawable/post_stamp"
+                app:startIconDrawable="@drawable/table_svgrepo_com"
                 app:hintTextColor="@color/color5"
                 app:endIconTint="@color/color5"
                 app:startIconTint="@color/color5"
@@ -405,13 +299,112 @@ android:background="@color/color_background"
                     android:layout_gravity="center"
                     android:hint="Jumlah Meja"
                     android:imeOptions="actionNext"
-                    android:inputType="text"
+                    android:inputType="number"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textColor="@color/temaapp"
                     android:textColorHint="@color/black"
                     android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+
+                <!-- Provinsi -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilProvinsi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Pilih Provinsi"
+                    app:endIconMode="dropdown_menu"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    app:startIconDrawable="@drawable/location"
+                    app:hintTextColor="@color/color5"
+                    app:startIconTint="@color/color5"
+                    android:textColorHint="@color/color5"
+                    app:boxStrokeColor="@color/color5">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/autoProvinsi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:focusable="true"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Kabupaten -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilKabupaten"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Pilih Kabupaten / Kota"
+                    android:layout_marginTop="12dp"
+                    app:endIconMode="dropdown_menu"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    app:startIconDrawable="@drawable/location"
+                    app:hintTextColor="@color/color5"
+                    app:startIconTint="@color/color5"
+                    android:textColorHint="@color/color5"
+                    app:boxStrokeColor="@color/color5">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/autoKabupaten"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Kecamatan -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilKecamatan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Pilih Kecamatan"
+                    android:layout_marginTop="12dp"
+                    app:endIconMode="dropdown_menu"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    app:startIconDrawable="@drawable/location"
+                    app:hintTextColor="@color/color5"
+                    app:startIconTint="@color/color5"
+                    android:textColorHint="@color/color5"
+                    app:boxStrokeColor="@color/color5">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/autoKecamatan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Kelurahan -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilKelurahan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Pilih Kelurahan / Desa"
+                    android:layout_marginTop="12dp"
+                    app:endIconMode="dropdown_menu"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    app:startIconDrawable="@drawable/location"
+                    app:hintTextColor="@color/color5"
+                    app:startIconTint="@color/color5"
+                    android:textColorHint="@color/color5"
+                    app:boxStrokeColor="@color/color5">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/autoKelurahan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.core.widget.NestedScrollView>

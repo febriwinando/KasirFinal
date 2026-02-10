@@ -220,9 +220,9 @@ public class BerandaActivity extends AppCompatActivity {
 
     private void updateStatus(boolean connected) {
         if (connected) {
-//            Toast.makeText(this, "✅ Terhubung ke Internet", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "✅ Terhubung ke Internet", Toast.LENGTH_SHORT).show();
         } else {
-//            Toast.makeText(this, "❌ Tidak ada koneksi Internet", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "❌ Tidak ada koneksi Internet", Toast.LENGTH_SHORT).show();
         }
     }
 

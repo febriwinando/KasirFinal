@@ -72,7 +72,5 @@ public interface api_transakasi_data {
             @Field("meja") String meja,
             @Field("jam_buka") String jam_buka,
             @Field("jam_tutup") String jam_tutup
-
-
     );
 }
